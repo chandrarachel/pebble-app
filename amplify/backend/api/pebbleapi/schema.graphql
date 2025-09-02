@@ -1,0 +1,73 @@
+type User @model @auth(rules: [{allow: owner}]) {
+  id: ID!
+  email: String! @index(name: "byEmail")
+  name: String!
+  avatar: String
+  groups: [GroupMember] @hasMany(indexName: "byUser", fields: ["id"])
+  reminders: [Reminder] @hasMany(indexName: "byOwner", fields: ["id"])
+  sharedReminders: [SharedReminder] @hasMany(indexName: "byUser", fields: ["id"])
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Group @model @auth(rules: [{allow: owner}, {allow: groups, groups: ["members"]}]) {
+  id: ID!
+  name: String!
+  description: String
+  color: String
+  owner: ID! @index(name: "byOwner")
+  members: [GroupMember] @hasMany(indexName: "byGroup", fields: ["id"])
+  reminders: [Reminder] @hasMany(indexName: "byGroup", fields: ["id"])
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type GroupMember @model @auth(rules: [{allow: owner}]) {
+  id: ID!
+  userId: ID! @index(name: "byUser")
+  groupId: ID! @index(name: "byGroup")
+  user: User @belongsTo(fields: ["userId"])
+  group: Group @belongsTo(fields: ["groupId"])
+  role: GroupRole!
+  joinedAt: AWSDateTime!
+}
+
+type Reminder @model @auth(rules: [{allow: owner}, {allow: groups, groups: ["group"]}]) {
+  id: ID!
+  title: String!
+  description: String
+  latitude: Float!
+  longitude: Float!
+  address: String
+  priority: Priority!
+  completed: Boolean!
+  dueDate: AWSDateTime
+  ownerId: ID! @index(name: "byOwner")
+  owner: User @belongsTo(fields: ["ownerId"])
+  groupId: ID @index(name: "byGroup")
+  group: Group @belongsTo(fields: ["groupId"])
+  sharedWith: [SharedReminder] @hasMany(indexName: "byReminder", fields: ["id"])
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type SharedReminder @model @auth(rules: [{allow: owner}]) {
+  id: ID!
+  reminderId: ID! @index(name: "byReminder")
+  userId: ID! @index(name: "byUser")
+  reminder: Reminder @belongsTo(fields: ["reminderId"])
+  user: User @belongsTo(fields: ["userId"])
+  canEdit: Boolean!
+  sharedAt: AWSDateTime!
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum GroupRole {
+  ADMIN
+  MEMBER
+}

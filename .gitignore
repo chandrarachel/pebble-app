@@ -1,0 +1,25 @@
+# Node modules
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.example
+
+# Expo
+.expo/
+
+# macOS system files
+.DS_Store
+
+# VS Code settings
+.vscode/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Amplify (if you have secrets, add specific files/folders)
+amplify/.config/local-env-info.json
+amplify/backend/.env
