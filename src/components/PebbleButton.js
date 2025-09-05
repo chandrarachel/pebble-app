@@ -1,5 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
+import Ripple from 'react-native-material-ripple';
 
 const PebbleButton = ({ 
   title, 
@@ -37,15 +38,28 @@ const PebbleButton = ({
     return baseStyle;
   };
 
+  const getRippleColor = () => {
+    if (disabled) return 'transparent';
+    switch (variant) {
+      case 'primary': return '#F2F7F5';
+      case 'secondary': return '#232D3F';
+      case 'accent': return '#232D3F';
+      case 'outline': return '#5C8374';
+      default: return '#F2F7F5';
+    }
+  };
+
   return (
-    <TouchableOpacity
+    <Ripple
       style={getButtonStyle()}
       onPress={onPress}
       disabled={disabled}
-      activeOpacity={0.8}
+      rippleColor={getRippleColor()}
+      rippleOpacity={0.3}
+      rippleContainerBorderRadius={25}
     >
       <Text style={getTextStyle()}>{title}</Text>
-    </TouchableOpacity>
+    </Ripple>
   );
 };
 
