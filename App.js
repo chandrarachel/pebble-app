@@ -8,8 +8,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import HomeScreen from './src/screens/HomeScreen';
 import MapScreen from './src/screens/MapScreen';
 import ListScreen from './src/screens/ListScreen';
+import CalendarScreen from './src/screens/CalendarScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import ChatScreen from './src/screens/ChatScreen';
+import ChatCreateScreen from './src/screens/ChatCreateScreen';
+import NewPebbleScreen from './src/screens/NewPebbleScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -18,6 +21,16 @@ const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="HomeMain" component={HomeScreen} />
     <Stack.Screen name="Chat" component={ChatScreen} />
+    <Stack.Screen name="ChatCreate" component={ChatCreateScreen} />
+    <Stack.Screen name="NewPebble" component={NewPebbleScreen} />
+  </Stack.Navigator>
+);
+
+const CalendarStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="CalendarMain" component={CalendarScreen} />
+    <Stack.Screen name="ChatCreate" component={ChatCreateScreen} />
+    <Stack.Screen name="NewPebble" component={NewPebbleScreen} />
   </Stack.Navigator>
 );
 
@@ -55,29 +68,29 @@ export default function App() {
             headerShown: false
           })}
         >
-          <Tab.Screen 
-            name="Home" 
+          <Tab.Screen
+            name="Home"
             component={HomeStack}
             options={{
               tabBarLabel: 'Home',
             }}
           />
-          <Tab.Screen 
-            name="Calendar" 
-            component={ListScreen}
+          <Tab.Screen
+            name="Calendar"
+            component={CalendarStack}
             options={{
               tabBarLabel: 'Calendar',
             }}
           />
-          <Tab.Screen 
-            name="Map" 
+          <Tab.Screen
+            name="Map"
             component={MapScreen}
             options={{
               tabBarLabel: 'Map',
             }}
           />
-          <Tab.Screen 
-            name="Profile" 
+          <Tab.Screen
+            name="Profile"
             component={ProfileScreen}
             options={{
               tabBarLabel: 'Profile',

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Ripple from 'react-native-material-ripple';
+import { colors, spacing, borderRadius, shadows, typography } from '../styles/globalStyles';
 
 const ChatBubble = ({ 
   message, 
@@ -49,7 +50,7 @@ const ChatBubble = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 12,
+    marginBottom: spacing.md,
   },
   userContainer: {
     alignItems: 'flex-end',
@@ -59,45 +60,40 @@ const styles = StyleSheet.create({
   },
   bubble: {
     maxWidth: '80%',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.xl,
+    ...shadows.sm,
   },
   userBubble: {
-    backgroundColor: '#5C8374',
+    backgroundColor: colors.pebble.green,
     borderBottomRightRadius: 6,
   },
   botBubble: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.neutral.white,
     borderBottomLeftRadius: 6,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: colors.neutral.gray200,
   },
   text: {
-    fontSize: 16,
-    lineHeight: 22,
+    ...typography.body1,
   },
   userText: {
-    color: '#F2F7F5',
+    color: colors.pebble.mint,
     fontWeight: '500',
   },
   botText: {
-    color: '#232D3F',
+    color: colors.pebble.slate,
   },
   actionsContainer: {
-    marginTop: 8,
-    paddingTop: 8,
+    marginTop: spacing.sm,
+    paddingTop: spacing.sm,
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
+    borderTopColor: colors.neutral.gray200,
   },
   actionHint: {
-    fontSize: 12,
-    color: '#6EC6CA',
+    ...typography.caption,
+    color: colors.pebble.aqua,
     fontStyle: 'italic',
   },
 });

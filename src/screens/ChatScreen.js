@@ -12,6 +12,7 @@ import Ripple from 'react-native-material-ripple';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { parseReminderText, generateBotResponse } from '../utils/nlpParser';
 import ChatBubble from '../components/ChatBubble';
+import { colors, globalStyles, spacing, borderRadius, shadows } from '../styles/globalStyles';
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState([
@@ -68,7 +69,7 @@ const ChatScreen = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={globalStyles.container}>
       <KeyboardAvoidingView 
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -116,52 +117,44 @@ const ChatScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F2F7F5',
-  },
   messagesList: {
-    padding: 16,
-    paddingBottom: 8,
+    padding: spacing.lg,
+    paddingBottom: spacing.sm,
   },
   inputContainer: {
-    padding: 16,
-    backgroundColor: '#FFFFFF',
+    padding: spacing.lg,
+    backgroundColor: colors.neutral.white,
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
+    borderTopColor: colors.neutral.gray200,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    backgroundColor: '#F2F7F5',
-    borderRadius: 25,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    backgroundColor: colors.pebble.mint,
+    borderRadius: borderRadius.xxl,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm,
+    ...shadows.sm,
   },
   textInput: {
     flex: 1,
     fontSize: 16,
-    color: '#232D3F',
+    color: colors.pebble.slate,
     maxHeight: 100,
-    paddingVertical: 8,
-    paddingRight: 12,
+    paddingVertical: spacing.sm,
+    paddingRight: spacing.md,
   },
   sendButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#6EC6CA',
+    backgroundColor: colors.pebble.aqua,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 8,
+    marginLeft: spacing.sm,
   },
   sendButtonDisabled: {
-    backgroundColor: '#E0E0E0',
+    backgroundColor: colors.neutral.gray200,
   },
 });
 

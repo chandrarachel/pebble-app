@@ -9,9 +9,9 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@react-navigation/bottom-tabs": "^6.5.0",
-    "@react-navigation/native": "^6.1.0",
-    "@react-navigation/stack": "^6.3.0",
+    "@react-navigation/bottom-tabs": "^6.6.1",
+    "@react-navigation/native": "^6.1.18",
+    "@react-navigation/stack": "^6.4.1",
     "aws-amplify": "^6.0.0",
     "expo": "53.0.22",
     "expo-location": "~18.1.6",
@@ -19,11 +19,12 @@
     "react": "19.0.0",
     "react-native": "0.79.5",
     "react-native-gesture-handler": "~2.24.0",
-    "react-native-maps": "1.20.1",
+    "react-native-maps": "^1.20.1",
     "react-native-material-ripple": "^0.9.1",
+    "react-native-paper": "^5.14.5",
     "react-native-push-notification": "^8.1.1",
     "react-native-reanimated": "~3.17.4",
-    "react-native-safe-area-context": "5.4.0",
+    "react-native-safe-area-context": "^5.4.0",
     "react-native-screens": "~4.11.1",
     "react-native-vector-icons": "^9.2.0"
   },
