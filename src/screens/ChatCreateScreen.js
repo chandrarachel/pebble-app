@@ -60,7 +60,7 @@ const ChatCreateScreen = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="arrow-back" size={24} color="#232D3F" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Chat Assistant</Text>
+        <Text style={styles.headerTitle}>Create New Pebble</Text>
         <View style={{ width: 24 }} />
       </View>
 
