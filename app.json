@@ -10,10 +10,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.pebbleapp.mobile",
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
+      "bundleIdentifier": "com.pebbleapp.mobile"
     },
     "android": {
       "package": "com.pebbleapp.mobile",
@@ -21,23 +18,12 @@
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
         "RECEIVE_BOOT_COMPLETED",
-        "VIBRATE",
-        "WAKE_LOCK",
-        "POST_NOTIFICATIONS",
-        "android.permission.ACCESS_COARSE_LOCATION",
-        "android.permission.ACCESS_FINE_LOCATION"
+        "VIBRATE"
       ]
     },
     "web": {},
     "plugins": [
-      "expo-location",
-      "expo-notifications"
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "bcb5f414-d387-45e6-b359-da0b2a5e77b6"
-      }
-    },
-    "owner": "bryanlee2004"
+      "expo-location"
+    ]
   }
 }

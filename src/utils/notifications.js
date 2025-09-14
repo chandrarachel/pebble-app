@@ -1,59 +1,100 @@
-import { Alert, Platform } from 'react-native';
+import PushNotification from 'react-native-push-notification';
+import { Platform } from 'react-native';
 
 class NotificationService {
   constructor() {
-    this.scheduledNotifications = new Map();
     this.configure();
   }
 
   configure() {
-    console.log('Notification service configured for Expo Go');
+    PushNotification.configure({
+      onRegister: (token) => {
+        console.log('Push notification token:', token);
+      },
+      
+      onNotification: (notification) => {
+        console.log('Notification received:', notification);
+        if (notification.userInteraction) {
+          // Handle notification tap
+          this.handleNotificationTap(notification);
+        }
+      },
+
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+
+      popInitialNotification: true,
+      requestPermissions: Platform.OS === 'ios',
+    });
+
+    // Create notification channels for Android
+    if (Platform.OS === 'android') {
+      PushNotification.createChannel(
+        {
+          channelId: 'pebble-reminders',
+          channelName: 'Pebble Reminders',
+          channelDescription: 'Location-based reminders from Pebble',
+          playSound: true,
+          soundName: 'default',
+          importance: 4,
+          vibrate: true,
+        },
+        (created) => console.log(`Channel created: ${created}`)
+      );
+    }
   }
 
   scheduleLocationReminder(reminder) {
-    const { id, title } = reminder;
+    const { id, title, description, latitude, longitude } = reminder;
     
-    // Simulate immediate location notification
-    setTimeout(() => {
-      Alert.alert(
-        '📍 Pebble Reminder',
-        `${title} - You're near this location!`,
-        [{ text: 'OK', style: 'default' }]
-      );
-    }, 1000);
-    
-    this.scheduledNotifications.set(id, {
-      type: 'location',
-      title,
-      scheduledAt: new Date()
+    PushNotification.localNotification({
+      id: id,
+      channelId: 'pebble-reminders',
+      title: '📍 Pebble Reminder',
+      message: `${title} - You're near this location!`,
+      bigText: description,
+      subText: 'Location-based reminder',
+      color: '#5C8374',
+      vibrate: true,
+      vibration: 300,
+      playSound: true,
+      soundName: 'default',
+      actions: ['Mark Complete', 'Snooze'],
+      userInfo: {
+        type: 'location_reminder',
+        reminderId: id,
+        latitude,
+        longitude
+      }
     });
   }
 
   scheduleTimeReminder(reminder) {
-    const { id, title, dueDate } = reminder;
+    const { id, title, description, dueDate } = reminder;
     
-    const delay = new Date(dueDate).getTime() - Date.now();
-    
-    if (delay > 0) {
-      setTimeout(() => {
-        Alert.alert(
-          '⏰ Pebble Reminder',
-          title,
-          [{ text: 'OK', style: 'default' }]
-        );
-      }, delay);
-    }
-    
-    this.scheduledNotifications.set(id, {
-      type: 'time',
-      title,
-      dueDate,
-      scheduledAt: new Date()
+    PushNotification.localNotificationSchedule({
+      id: id,
+      channelId: 'pebble-reminders',
+      title: '⏰ Pebble Reminder',
+      message: title,
+      bigText: description,
+      date: new Date(dueDate),
+      color: '#FFD166',
+      vibrate: true,
+      playSound: true,
+      actions: ['Mark Complete', 'Snooze 15min'],
+      userInfo: {
+        type: 'time_reminder',
+        reminderId: id
+      }
     });
   }
 
   cancelReminder(reminderId) {
-    this.scheduledNotifications.delete(reminderId);
+    PushNotification.cancelLocalNotifications({ id: reminderId });
   }
 
   handleNotificationTap(notification) {
@@ -69,19 +110,15 @@ class NotificationService {
   }
 
   requestPermissions() {
-    return Promise.resolve({ granted: true });
-  }
-
-  checkPermissions() {
-    return Promise.resolve({
-      alert: true,
-      badge: true,
-      sound: true,
+    return new Promise((resolve) => {
+      PushNotification.requestPermissions().then(resolve);
     });
   }
 
-  getScheduledNotifications() {
-    return Array.from(this.scheduledNotifications.values());
+  checkPermissions() {
+    return new Promise((resolve) => {
+      PushNotification.checkPermissions(resolve);
+    });
   }
 }
 
