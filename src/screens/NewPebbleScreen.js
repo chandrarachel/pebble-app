@@ -14,7 +14,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import PebbleButton from '../components/PebbleButton';
-import NotificationManager from '../services/notificationManager';
 import { colors, globalStyles, spacing, borderRadius, shadows, typography } from '../styles/globalStyles';
 
 const NewPebbleScreen = ({ navigation, route }) => {
@@ -73,9 +72,8 @@ const NewPebbleScreen = ({ navigation, route }) => {
 
     const handleCreatePebble = async () => {
         try {
-            const reminderId = Date.now().toString();
+            // TODO: Integrate with reminderService
             const reminderData = {
-                id: reminderId,
                 title: reminderText,
                 description: notes,
                 latitude: mapRegion.latitude,
@@ -83,44 +81,15 @@ const NewPebbleScreen = ({ navigation, route }) => {
                 address: selectedLocation,
                 priority: 'MEDIUM',
                 completed: false,
-                dueDate: timeEnabled ? new Date(Date.now() + 60000).toISOString() : null, // 1 minute from now for demo
+                dueDate: timeEnabled ? new Date().toISOString() : null,
             };
 
             console.log('Creating reminder:', reminderData);
-            
-            // Schedule notifications based on enabled options
-            let notificationResults = [];
-            
-            if (locationEnabled) {
-                const locationResult = NotificationManager.scheduleLocationReminder(reminderData);
-                notificationResults.push(locationResult);
-            }
-            
-            if (timeEnabled) {
-                const timeResult = NotificationManager.scheduleTimeReminder({
-                    ...reminderData,
-                    dueDate: new Date(Date.now() + 60000) // 1 minute from now for demo
-                });
-                notificationResults.push(timeResult);
-            }
-            
-            // Show success message
-            const successCount = notificationResults.filter(r => r.success).length;
-            if (successCount > 0) {
-                Alert.alert(
-                    '🪨 Pebble Created!',
-                    `Your reminder has been created with ${successCount} notification${successCount > 1 ? 's' : ''} scheduled.`,
-                    [{ text: 'OK', onPress: () => navigation.goBack() }]
-                );
-            } else {
-                navigation.goBack();
-            }
-            
-            // TODO: Integrate with reminderService to save to database
             // await reminderService.createReminder(reminderData);
+
+            navigation.goBack();
         } catch (error) {
             console.error('Error creating reminder:', error);
-            Alert.alert('Error', 'Failed to create reminder. Please try again.');
         }
     };
 
