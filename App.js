@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import NotificationService from './src/utils/notifications';
 
 import HomeScreen from './src/screens/HomeScreen';
 import MapScreen from './src/screens/MapScreen';
@@ -13,6 +14,7 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import ChatScreen from './src/screens/ChatScreen';
 import ChatCreateScreen from './src/screens/ChatCreateScreen';
 import NewPebbleScreen from './src/screens/NewPebbleScreen';
+import NotificationTestScreen from './src/screens/NotificationTestScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -34,7 +36,19 @@ const CalendarStack = () => (
   </Stack.Navigator>
 );
 
+const ProfileStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="ProfileMain" component={ProfileScreen} />
+    <Stack.Screen name="NotificationTest" component={NotificationTestScreen} />
+  </Stack.Navigator>
+);
+
 export default function App() {
+  useEffect(() => {
+    // Initialize notification service
+    NotificationService.requestPermissions();
+  }, []);
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
@@ -91,7 +105,7 @@ export default function App() {
           />
           <Tab.Screen
             name="Profile"
-            component={ProfileScreen}
+            component={ProfileStack}
             options={{
               tabBarLabel: 'Profile',
             }}

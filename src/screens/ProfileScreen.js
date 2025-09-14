@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const menuItems = [
     { id: '1', title: 'My Groups', icon: 'group', color: '#6EC6CA' },
     { id: '2', title: 'Shared Reminders', icon: 'share', color: '#FFD166' },
@@ -11,8 +11,14 @@ const ProfileScreen = () => {
     { id: '5', title: 'Help & Support', icon: 'help', color: '#6EC6CA' },
   ];
 
+  const handleMenuPress = (item) => {
+    if (item.title === 'Notifications') {
+      navigation.navigate('NotificationTest');
+    }
+  };
+
   const MenuItem = ({ item }) => (
-    <TouchableOpacity style={styles.menuItem}>
+    <TouchableOpacity style={styles.menuItem} onPress={() => handleMenuPress(item)}>
       <View style={[styles.iconContainer, { backgroundColor: `${item.color}20` }]}>
         <Icon name={item.icon} size={24} color={item.color} />
       </View>
