@@ -23,16 +23,16 @@ export const getUserTasks = async (userId: string): Promise<Task[]> => {
     return userTasks;
 }
 
-export const createTask = async (task : Omit<Task, 'id'> & Partial<Pick<Task, 'id'>>): Promise<Task> => {
+export const createTask = async (task : Partial<Task>): Promise<Task> => {
     const [newTask] = await db.insert(tasks)
-        .values(task)
+        .values(task as Task)
         .returning()
         .then(res => res as Task[]);
 
     return newTask as Task;
 }
 
-export const updateTask = async (id: string, task: Partial<Omit<Task, 'id'>>): Promise<Task | null> => {
+export const updateTask = async (id: string, task: Partial<Task>): Promise<Task | null> => {
     const [updatedTask] = await db.update(tasks)
         .set(task)
         .where(eq(tasks.id, id))
