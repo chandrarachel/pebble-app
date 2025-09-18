@@ -5,12 +5,12 @@ import {
     TextInput,
     TouchableOpacity,
     StyleSheet,
-    SafeAreaView,
     ScrollView,
     Switch,
     Alert
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { MaterialIcons } from '@expo/vector-icons';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import PebbleButton from '../components/PebbleButton';
@@ -97,7 +97,7 @@ const NewPebbleScreen = ({ navigation, route }) => {
         <SafeAreaView style={globalStyles.container}>
             <View style={globalStyles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Icon name="close" size={24} color={colors.pebble.slate} />
+                    <MaterialIcons name="close" size={24} color={colors.pebble.slate} />
                 </TouchableOpacity>
                 <Text style={globalStyles.headerTitle}>New Pebble</Text>
                 <View style={{ width: 24 }} />
@@ -117,7 +117,7 @@ const NewPebbleScreen = ({ navigation, route }) => {
                 <View style={globalStyles.section}>
                     <View style={globalStyles.rowBetween}>
                         <View style={globalStyles.row}>
-                            <Icon
+                            <MaterialIcons
                                 name="schedule"
                                 size={20}
                                 color={timeEnabled ? colors.pebble.aqua : colors.neutral.gray300}
@@ -135,7 +135,7 @@ const NewPebbleScreen = ({ navigation, route }) => {
                     {timeEnabled && (
                         <TouchableOpacity style={[globalStyles.card, styles.optionCard]}>
                             <Text style={styles.optionText}>{selectedTime}</Text>
-                            <Icon name="chevron-right" size={20} color={colors.neutral.gray400} />
+                            <MaterialIcons name="chevron-right" size={20} color={colors.neutral.gray400} />
                         </TouchableOpacity>
                     )}
                 </View>
@@ -143,7 +143,7 @@ const NewPebbleScreen = ({ navigation, route }) => {
                 <View style={globalStyles.section}>
                     <View style={globalStyles.rowBetween}>
                         <View style={globalStyles.row}>
-                            <Icon
+                            <MaterialIcons
                                 name="location-on"
                                 size={20}
                                 color={locationEnabled ? colors.pebble.aqua : colors.neutral.gray300}
@@ -162,10 +162,10 @@ const NewPebbleScreen = ({ navigation, route }) => {
                         <>
                             <TouchableOpacity style={[globalStyles.card, styles.optionCard]}>
                                 <View style={globalStyles.row}>
-                                    <Icon name="my-location" size={16} color={colors.pebble.green} />
+                                    <MaterialIcons name="my-location" size={16} color={colors.pebble.green} />
                                     <Text style={[styles.optionText, { marginLeft: spacing.sm }]}>{selectedLocation}</Text>
                                 </View>
-                                <Icon name="chevron-right" size={20} color={colors.neutral.gray400} />
+                                <MaterialIcons name="chevron-right" size={20} color={colors.neutral.gray400} />
                             </TouchableOpacity>
 
                             <View style={styles.mapContainer}>
@@ -181,7 +181,7 @@ const NewPebbleScreen = ({ navigation, route }) => {
                                 >
                                     <Marker coordinate={mapRegion}>
                                         <View style={styles.pebbleMarker}>
-                                            <Icon name="location-on" size={20} color={colors.pebble.slate} />
+                                            <MaterialIcons name="location-on" size={20} color={colors.pebble.slate} />
                                         </View>
                                     </Marker>
                                 </MapView>

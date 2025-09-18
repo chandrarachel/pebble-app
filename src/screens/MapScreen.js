@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const MapScreen = () => {
   const [reminders, setReminders] = useState([]);
@@ -60,14 +60,14 @@ const MapScreen = () => {
             title={reminder.title}
           >
             <View style={[styles.pebblePin, { backgroundColor: getPebbleColor(reminder.priority) }]}>
-              <Icon name="place" size={20} color="#232D3F" />
+              <MaterialIcons name="place" size={20} color="#232D3F" />
             </View>
           </Marker>
         ))}
       </MapView>
       
       <TouchableOpacity style={styles.addButton}>
-        <Icon name="add" size={24} color="#F2F7F5" />
+        <MaterialIcons name="add" size={24} color="#F2F7F5" />
       </TouchableOpacity>
     </View>
   );

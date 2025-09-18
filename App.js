@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import HomeScreen from './src/screens/HomeScreen';
 import MapScreen from './src/screens/MapScreen';
@@ -46,7 +46,7 @@ export default function App() {
               else if (route.name === 'Calendar') iconName = 'event';
               else if (route.name === 'Map') iconName = 'map';
               else if (route.name === 'Profile') iconName = 'person';
-              return <Icon name={iconName} size={size} color={color} />;
+              return <MaterialIcons name={iconName} size={size} color={color} />;
             },
             tabBarActiveTintColor: '#5C8374',
             tabBarInactiveTintColor: '#99A3A4',

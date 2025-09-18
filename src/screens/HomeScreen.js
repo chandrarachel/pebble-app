@@ -10,7 +10,7 @@ import {
     Dimensions
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { MaterialIcons } from '@expo/vector-icons';
 import Ripple from 'react-native-material-ripple';
 
 const { width } = Dimensions.get('window');
@@ -78,7 +78,7 @@ const HomeScreen = ({ navigation }) => {
                 <View style={styles.reminderHeader}>
                     <TouchableOpacity style={styles.checkbox}>
                         {item.completed ? (
-                            <Icon name="check-circle" size={24} color="#6EC6CA" />
+                            <MaterialIcons name="check-circle" size={24} color="#6EC6CA" />
                         ) : (
                             <View style={styles.uncheckedBox} />
                         )}
@@ -92,11 +92,11 @@ const HomeScreen = ({ navigation }) => {
                         </Text>
                         <View style={styles.reminderMeta}>
                             <View style={styles.timeContainer}>
-                                <Icon name="access-time" size={14} color="#6EC6CA" />
+                                <MaterialIcons name="access-time" size={14} color="#6EC6CA" />
                                 <Text style={styles.metaText}>{item.time}</Text>
                             </View>
                             <View style={styles.locationContainer}>
-                                <Icon name="location-on" size={14} color="#6EC6CA" />
+                                <MaterialIcons name="location-on" size={14} color="#6EC6CA" />
                                 <Text style={styles.metaText}>{item.location}</Text>
                             </View>
                         </View>
@@ -127,7 +127,7 @@ const HomeScreen = ({ navigation }) => {
                 </View>
 
                 <View style={styles.searchContainer}>
-                    <Icon name="search" size={20} color="#999" style={styles.searchIcon} />
+                    <MaterialIcons name="search" size={20} color="#999" style={styles.searchIcon} />
                     <TextInput
                         style={styles.searchInput}
                         placeholder="Search Reminders"
@@ -138,7 +138,7 @@ const HomeScreen = ({ navigation }) => {
                 </View>
 
                 <TouchableOpacity style={styles.menuButton}>
-                    <Icon name="tune" size={24} color="#5C8374" />
+                    <MaterialIcons name="tune" size={24} color="#5C8374" />
                 </TouchableOpacity>
             </View>
 
@@ -165,7 +165,7 @@ const HomeScreen = ({ navigation }) => {
                             }}
                         >
                             <View style={styles.pebbleMarker}>
-                                <Icon name="location-on" size={20} color="#232D3F" />
+                                <MaterialIcons name="location-on" size={20} color="#232D3F" />
                             </View>
                         </Marker>
                     </MapView>
@@ -200,7 +200,7 @@ const HomeScreen = ({ navigation }) => {
                     rippleOpacity={0.3}
                     rippleContainerBorderRadius={30}
                 >
-                    <Icon name="add" size={24} color="#232D3F" style={styles.fabIcon} />
+                    <MaterialIcons name="add" size={24} color="#232D3F" style={styles.fabIcon} />
                     <Text style={styles.fabText}>New Pebble</Text>
                 </Ripple>
             </View>

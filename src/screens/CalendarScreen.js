@@ -5,11 +5,11 @@ import {
     StyleSheet,
     TouchableOpacity,
     ScrollView,
-    SafeAreaView,
     Dimensions,
     Animated
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
@@ -65,6 +65,11 @@ const CalendarScreen = ({ navigation }) => {
         // Add all days of the month
         for (let day = 1; day <= daysInMonth; day++) {
             days.push(day);
+        }
+
+        // Add empty spaces after the last day to fill the last week (so grid is always 7 columns wide)
+        while (days.length % 7 !== 0) {
+            days.push(null);
         }
 
         return days;
@@ -125,7 +130,7 @@ const CalendarScreen = ({ navigation }) => {
         <View key={reminder.id} style={styles.reminderItem}>
             <TouchableOpacity style={styles.checkbox}>
                 {reminder.completed ? (
-                    <Icon name="check-circle" size={24} color="#6EC6CA" />
+                    <MaterialIcons name="check-circle" size={24} color="#6EC6CA" />
                 ) : (
                     <View style={styles.uncheckedBox} />
                 )}
@@ -137,11 +142,11 @@ const CalendarScreen = ({ navigation }) => {
                 </Text>
                 <View style={styles.reminderMeta}>
                     <View style={styles.timeContainer}>
-                        <Icon name="access-time" size={14} color="#6EC6CA" />
+                        <MaterialIcons name="access-time" size={14} color="#6EC6CA" />
                         <Text style={styles.metaText}>{reminder.time}</Text>
                     </View>
                     <View style={styles.locationContainer}>
-                        <Icon name="location-on" size={14} color="#6EC6CA" />
+                        <MaterialIcons name="location-on" size={14} color="#6EC6CA" />
                         <Text style={styles.metaText}>{reminder.location}</Text>
                     </View>
                 </View>
@@ -170,7 +175,7 @@ const CalendarScreen = ({ navigation }) => {
                             style={styles.navButton}
                             onPress={() => navigateMonth(-1)}
                         >
-                            <Icon name="chevron-left" size={24} color="#5C8374" />
+                            <MaterialIcons name="chevron-left" size={24} color="#5C8374" />
                         </TouchableOpacity>
 
                         <Text style={styles.monthText}>
@@ -181,7 +186,7 @@ const CalendarScreen = ({ navigation }) => {
                             style={styles.navButton}
                             onPress={() => navigateMonth(1)}
                         >
-                            <Icon name="chevron-right" size={24} color="#5C8374" />
+                            <MaterialIcons name="chevron-right" size={24} color="#5C8374" />
                         </TouchableOpacity>
                     </View>
 
@@ -227,13 +232,13 @@ const CalendarScreen = ({ navigation }) => {
                         </View>
                     ) : (
                         <View style={styles.noRemindersContainer}>
-                            <Icon name="event-available" size={48} color="#E0E0E0" />
+                            <MaterialIcons name="event-available" size={48} color="#E0E0E0" />
                             <Text style={styles.noRemindersText}>No reminders for this date</Text>
                             <TouchableOpacity
                                 style={styles.addReminderButton}
                                 onPress={() => navigation?.navigate('ChatCreate')}
                             >
-                                <Icon name="add" size={20} color="#5C8374" />
+                                <MaterialIcons name="add" size={20} color="#5C8374" />
                                 <Text style={styles.addReminderText}>Add Reminder</Text>
                             </TouchableOpacity>
                         </View>
