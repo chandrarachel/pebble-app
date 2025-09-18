@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const ProfileScreen = () => {
   const menuItems = [
@@ -14,10 +14,10 @@ const ProfileScreen = () => {
   const MenuItem = ({ item }) => (
     <TouchableOpacity style={styles.menuItem}>
       <View style={[styles.iconContainer, { backgroundColor: `${item.color}20` }]}>
-        <Icon name={item.icon} size={24} color={item.color} />
+        <MaterialIcons name={item.icon} size={24} color={item.color} />
       </View>
       <Text style={styles.menuText}>{item.title}</Text>
-      <Icon name="chevron-right" size={24} color="#999" />
+      <MaterialIcons name="chevron-right" size={24} color="#999" />
     </TouchableOpacity>
   );
 
@@ -26,14 +26,14 @@ const ProfileScreen = () => {
       <View style={styles.header}>
         <View style={styles.profileSection}>
           <View style={styles.avatarContainer}>
-            <Icon name="person" size={40} color="#5C8374" />
+            <MaterialIcons name="person" size={40} color="#5C8374" />
           </View>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>Rachel Chandra</Text>
-            <Text style={styles.userEmail}>rachel@example.com</Text>
+            <Text style={styles.userName}>John Doe</Text>
+            <Text style={styles.userEmail}>johndoe@example.com</Text>
           </View>
           <TouchableOpacity style={styles.editButton}>
-            <Icon name="edit" size={20} color="#5C8374" />
+            <MaterialIcons name="edit" size={20} color="#5C8374" />
           </TouchableOpacity>
         </View>
       </View>
@@ -60,7 +60,7 @@ const ProfileScreen = () => {
       </View>
 
       <TouchableOpacity style={styles.logoutButton}>
-        <Icon name="logout" size={20} color="#FF6B6B" />
+        <MaterialIcons name="logout" size={20} color="#FF6B6B" />
         <Text style={styles.logoutText}>Sign Out</Text>
       </TouchableOpacity>
     </View>

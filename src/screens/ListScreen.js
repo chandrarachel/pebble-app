@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const ListScreen = () => {
   const [reminders] = useState([
@@ -47,7 +47,7 @@ const ListScreen = () => {
         <View style={[styles.priorityDot, { backgroundColor: getPriorityColor(item.priority) }]} />
         <Text style={[styles.title, item.completed && styles.completedText]}>{item.title}</Text>
         <TouchableOpacity>
-          <Icon name="more-vert" size={20} color="#232D3F" />
+          <MaterialIcons name="more-vert" size={20} color="#232D3F" />
         </TouchableOpacity>
       </View>
       
@@ -57,7 +57,7 @@ const ListScreen = () => {
       
       <View style={styles.cardFooter}>
         <View style={styles.locationContainer}>
-          <Icon name="location-on" size={16} color="#6EC6CA" />
+          <MaterialIcons name="location-on" size={16} color="#6EC6CA" />
           <Text style={styles.location}>{item.location}</Text>
         </View>
         <Text style={styles.dueDate}>{item.dueDate}</Text>
@@ -70,7 +70,7 @@ const ListScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>My Reminders</Text>
         <TouchableOpacity style={styles.filterButton}>
-          <Icon name="filter-list" size={24} color="#5C8374" />
+          <MaterialIcons name="filter-list" size={24} color="#5C8374" />
         </TouchableOpacity>
       </View>
       

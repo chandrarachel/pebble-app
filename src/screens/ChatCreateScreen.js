@@ -6,10 +6,10 @@ import {
   TouchableOpacity, 
   StyleSheet, 
   Keyboard, 
-  SafeAreaView,
   Animated
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { MaterialIcons } from '@expo/vector-icons';
 import { parseReminderText } from '../utils/nlpParser';
 
 const ChatCreateScreen = ({ navigation }) => {
@@ -58,9 +58,9 @@ const ChatCreateScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name="arrow-back" size={24} color="#232D3F" />
+          <MaterialIcons name="arrow-back" size={24} color="#232D3F" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Chat Assistant</Text>
+        <Text style={styles.headerTitle}>Create New Pebble</Text>
         <View style={{ width: 24 }} />
       </View>
 
@@ -88,28 +88,28 @@ const ChatCreateScreen = ({ navigation }) => {
             <Text style={styles.summaryTitle}>Here's what I understood:</Text>
             
             <View style={styles.summaryItem}>
-              <Icon name="task-alt" size={18} color="#5C8374" />
+              <MaterialIcons name="task-alt" size={18} color="#5C8374" />
               <Text style={styles.summaryText}>{aiResult.text}</Text>
             </View>
             
             <View style={styles.summaryItem}>
-              <Icon name="access-time" size={18} color="#5C8374" />
+              <MaterialIcons name="access-time" size={18} color="#5C8374" />
               <Text style={styles.summaryText}>{aiResult.time}</Text>
             </View>
             
             <View style={styles.summaryItem}>
-              <Icon name="location-on" size={18} color="#5C8374" />
+              <MaterialIcons name="location-on" size={18} color="#5C8374" />
               <Text style={styles.summaryText}>{aiResult.location}</Text>
             </View>
 
             <View style={styles.summaryActions}>
               <TouchableOpacity style={styles.editBtn} onPress={handleEdit}>
-                <Icon name="edit" size={16} color="#5C8374" />
+                <MaterialIcons name="edit" size={16} color="#5C8374" />
                 <Text style={styles.editBtnText}>Edit Details</Text>
               </TouchableOpacity>
               
               <TouchableOpacity style={styles.confirmBtn} onPress={handleConfirm}>
-                <Icon name="check-circle" size={16} color="#fff" />
+                <MaterialIcons name="check-circle" size={16} color="#fff" />
                 <Text style={styles.confirmBtnText}>Create Pebble</Text>
               </TouchableOpacity>
             </View>
@@ -137,7 +137,7 @@ const ChatCreateScreen = ({ navigation }) => {
             onPress={handleSend} 
             disabled={!message.trim() || aiResult || isProcessing}
           >
-            <Icon 
+            <MaterialIcons
               name="send" 
               size={20} 
               color={message.trim() && !aiResult && !isProcessing ? "#F2F7F5" : "#999"} 
