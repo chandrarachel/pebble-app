@@ -29,8 +29,8 @@ const ProfileScreen = () => {
             <MaterialIcons name="person" size={40} color="#5C8374" />
           </View>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>Rachel Chandra</Text>
-            <Text style={styles.userEmail}>rachel@example.com</Text>
+            <Text style={styles.userName}>John Doe</Text>
+            <Text style={styles.userEmail}>johndoe@example.com</Text>
           </View>
           <TouchableOpacity style={styles.editButton}>
             <MaterialIcons name="edit" size={20} color="#5C8374" />
