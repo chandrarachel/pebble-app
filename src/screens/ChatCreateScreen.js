@@ -10,7 +10,7 @@ import {
   Animated
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { parseReminderText } from '../utils/nlpParser';
+import { parseReminderText, test } from '../utils/nlpParser';
 
 const ChatCreateScreen = ({ navigation }) => {
   const [message, setMessage] = useState('');
@@ -18,30 +18,42 @@ const ChatCreateScreen = ({ navigation }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!message.trim()) return;
     
     setIsProcessing(true);
     Keyboard.dismiss();
-    
-    // Simulate AI processing
-    setTimeout(() => {
-      const parsed = parseReminderText(message);
+
+    console.log("Calling GPT")
+    // Simulate AI processing bruh
+    const parsed = await parseReminderText(message);
+    console.log(JSON.stringify(parsed))
+
+    if ("error" in parsed) {
+      // THe user doesn't chat about tasks
+      setAiResult({
+        text: parsed.error,
+        time: "--",
+        location: "--",
+        priority: "--"
+      });
+
+    } else {
       setAiResult({
         text: parsed.title,
-        time: parsed.timeInfo || "5:00 PM",
-        location: parsed.locationInfo || "Current Location",
+        time: parsed.timeInfo || "5:00 pm",
+        location: parsed.locationInfo || "current location",
         priority: parsed.priority
       });
-      setIsProcessing(false);
-      
-      // Animate result
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-    }, 1500);
+    }
+    setIsProcessing(false);
+    
+    // Animate result
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
   };
 
   const handleEdit = () => {
@@ -135,7 +147,7 @@ const ChatCreateScreen = ({ navigation }) => {
               (!message.trim() || aiResult || isProcessing) && styles.sendBtnDisabled
             ]} 
             onPress={handleSend} 
-            disabled={!message.trim() || aiResult || isProcessing}
+            disabled={!message.trim() || !!aiResult || isProcessing}
           >
             <Icon 
               name="send" 

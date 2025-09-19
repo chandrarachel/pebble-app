@@ -1,77 +1,53 @@
+const API_KEY = process.env.EXPO_PUBLIC_BEDROCK_API_KEY
+
+async function parseReminderTextGPT(text) {
+  const completion = await fetch("https://bedrock-runtime.us-east-1.amazonaws.com/model/us.amazon.nova-pro-v1:0/converse", {
+    method: "POST",
+    headers: {
+      'Authorization': "Bearer " + API_KEY
+    },
+    body: JSON.stringify({
+      response_type: {text: "json_object"},
+      system: [{text: `You are a chatbot for a reminder app. Check what reminder the client wants and return it as JSON like the following: 
+        ${JSON.stringify({
+          title: "Name of the task",
+          priority: "LOW, MEDIUM, HIGH depending on the urgency/priority of the request",
+          timeInfo: "Time the user wants the request to be fulfilled, in yyyy-mm-ddThh:mm:ss format, for reference, now is " + new Date().toISOString(),
+          locationInfo: "A general place name where the request can be fulfilled",
+        })}
+
+        if the customer doesn't talk anything about task, just respond formally, prompting for a task, in the following format
+        ${
+          JSON.stringify({
+            error: "Your message here"  
+          })
+        }
+
+        `}],
+      messages: [
+        {role: "user", content: [{text: text}]}
+      ]
+    })
+  }).catch(console.log)
+  /**
+   * @type {{title: string, priority: string, timeInfo: string, locationInfo: string} | {text: string}}
+   */
+  const val = JSON.parse((await completion.json()).output.message.content[0].text)
+  return val
+}
+
 // Simple NLP parser for reminder creation
-export const parseReminderText = (text) => {
-  const lowercaseText = text.toLowerCase();
-  
-  // Extract priority keywords
-  const getPriority = () => {
-    if (lowercaseText.includes('urgent') || lowercaseText.includes('important') || lowercaseText.includes('asap')) {
-      return 'HIGH';
-    }
-    if (lowercaseText.includes('later') || lowercaseText.includes('sometime') || lowercaseText.includes('eventually')) {
-      return 'LOW';
-    }
-    return 'MEDIUM';
-  };
+export const parseReminderText = async (text) => {
+  const obj = await parseReminderTextGPT(text)
+  console.log(obj)
+  if ('error' in obj) return obj
 
-  // Extract time-related keywords
-  const extractTime = () => {
-    const timePatterns = [
-      /at (\d{1,2}):?(\d{2})?\s*(am|pm)?/i,
-      /(\d{1,2})\s*(am|pm)/i,
-      /(morning|afternoon|evening|night)/i,
-      /(today|tomorrow|this week|next week)/i
-    ];
-    
-    for (const pattern of timePatterns) {
-      const match = text.match(pattern);
-      if (match) return match[0];
-    }
-    return null;
-  };
-
-  // Extract location keywords
-  const extractLocation = () => {
-    const locationPatterns = [
-      /at (the )?([a-zA-Z\s]+)/i,
-      /when I'm at ([a-zA-Z\s]+)/i,
-      /near ([a-zA-Z\s]+)/i,
-      /(grocery store|supermarket|mall|office|home|work|gym|school)/i
-    ];
-    
-    for (const pattern of locationPatterns) {
-      const match = text.match(pattern);
-      if (match) return match[match.length - 1];
-    }
-    return null;
-  };
-
-  // Extract the main task
-  const extractTask = () => {
-    const taskPatterns = [
-      /remind me to (.+)/i,
-      /I need to (.+)/i,
-      /don't forget to (.+)/i,
-      /(.+) when I/i
-    ];
-    
-    for (const pattern of taskPatterns) {
-      const match = text.match(pattern);
-      if (match) {
-        let task = match[1];
-        // Clean up the task by removing location and time info
-        task = task.replace(/\s+(at|when|near).+$/i, '');
-        task = task.replace(/\s+(today|tomorrow|this week|next week).+$/i, '');
-        return task.trim();
-      }
-    }
-    return text; // fallback to original text
-  };
-
+  console.log("Object is proper, now we continue execution")
   return {
-    title: extractTask(),
-    priority: getPriority(),
-    timeInfo: extractTime(),
-    locationInfo: extractLocation(),
+    title: obj.title,
+    priority: obj.priority,
+    timeInfo: obj.timeInfo,
+    locationInfo: obj.locationInfo,
     originalText: text
   };
 };

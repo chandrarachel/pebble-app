@@ -23,3 +23,6 @@ yarn-error.log*
 # Amplify (if you have secrets, add specific files/folders)
 amplify/.config/local-env-info.json
 amplify/backend/.env
+
+test
+android
