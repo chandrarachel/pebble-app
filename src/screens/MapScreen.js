@@ -1,36 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { MaterialIcons } from '@expo/vector-icons';
+import * as Location from 'expo-location';
+
+
+const mockReminders = [
+  {
+    id: '1',
+    title: 'Buy groceries',
+    latitude: 37.78825,
+    longitude: -122.4324,
+    priority: 'high'
+  },
+  {
+    id: '2',
+    title: 'Pick up dry cleaning',
+    latitude: 37.79025,
+    longitude: -122.4344,
+    priority: 'medium'
+  }
+];
 
 const MapScreen = () => {
   const [reminders, setReminders] = useState([]);
-  const [region, setRegion] = useState({
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
-
-  const mockReminders = [
-    {
-      id: '1',
-      title: 'Buy groceries',
-      latitude: 37.78825,
-      longitude: -122.4324,
-      priority: 'high'
-    },
-    {
-      id: '2',
-      title: 'Pick up dry cleaning',
-      latitude: 37.79025,
-      longitude: -122.4344,
-      priority: 'medium'
-    }
-  ];
+  const [region, setRegion] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setReminders(mockReminders);
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Permission to access location was denied');
+        setLoading(false);
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
+      setReminders(mockReminders);
+      setLoading(false);
+    })();
   }, []);
 
   const getPebbleColor = (priority) => {
@@ -41,12 +55,19 @@ const MapScreen = () => {
     }
   };
 
+  if (loading || !region) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color="#6EC6CA" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <MapView
         style={styles.map}
         region={region}
-        onRegionChangeComplete={setRegion}
         showsUserLocation={true}
         showsMyLocationButton={true}
       >
@@ -59,13 +80,12 @@ const MapScreen = () => {
             }}
             title={reminder.title}
           >
-            <View style={[styles.pebblePin, { backgroundColor: getPebbleColor(reminder.priority) }]}>
+            <View style={[styles.pebblePin, { backgroundColor: getPebbleColor(reminder.priority) }]}> 
               <MaterialIcons name="place" size={20} color="#232D3F" />
             </View>
           </Marker>
         ))}
       </MapView>
-      
       <TouchableOpacity style={styles.addButton}>
         <MaterialIcons name="add" size={24} color="#F2F7F5" />
       </TouchableOpacity>
@@ -106,7 +126,13 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+
     elevation: 5,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
