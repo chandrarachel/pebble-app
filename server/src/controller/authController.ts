@@ -23,14 +23,15 @@ export class AuthController {
     }
 
     async register(req: Request, res: Response): Promise<void> {
-        const { username, email, password, role, phoneNumber } = req.body;
-        if (!username || !email || !password || !role || !phoneNumber) {
+        const { username, email, password, phoneNumber } = req.body;
+        if (!username || !email || !password || !phoneNumber) {
             res.status(400).json({ message: "Missing required fields" });
             return;
         }
 
         try {
-            const user = { id: '', username, email, role, phoneNumber };
+            console.log(username, email, phoneNumber)
+            const user = { username, email, phoneNumber };
             await this.authService.register(user, password);
             res.status(201).json({ message: "User registered successfully" });
         } catch (err) {
