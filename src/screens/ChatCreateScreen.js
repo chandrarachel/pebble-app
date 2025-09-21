@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { 
   View, 
   Text, 
@@ -10,13 +10,30 @@ import {
   Animated
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { parseReminderText, test } from '../utils/nlpParser';
+import { parseReminderText } from '../utils/nlpParser';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatCreateScreen = ({ navigation }) => {
   const [message, setMessage] = useState('');
   const [aiResult, setAiResult] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const _saveDataToArray = async (value) => {
+    try {
+      const existingData = await AsyncStorage.getItem('reminders');
+      let dataArray = existingData ? JSON.parse(existingData) : [];
+      
+      console.log('Saving data')
+      dataArray.push(value);
+      
+      // Save back to AsyncStorage
+      await AsyncStorage.setItem('reminders', JSON.stringify(dataArray));
+      console.log(await AsyncStorage.getItem('reminders'));
+    } catch (e) {
+      console.error("Failed to save data to array", e);
+    }
+  }
 
   const handleSend = async () => {
     if (!message.trim()) return;
@@ -60,8 +77,10 @@ const ChatCreateScreen = ({ navigation }) => {
     navigation.navigate('NewPebble', { ...aiResult });
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     // TODO: Create reminder using reminderService
+    await _saveDataToArray(aiResult);
+    console.log(await AsyncStorage.getItem('reminders'));
     console.log('Creating reminder:', aiResult);
     navigation.navigate('HomeMain');
   };
