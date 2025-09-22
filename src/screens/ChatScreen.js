@@ -6,10 +6,10 @@ import {
   StyleSheet, 
   KeyboardAvoidingView, 
   Platform,
-  SafeAreaView 
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Ripple from 'react-native-material-ripple';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { parseReminderText, generateBotResponse } from '../utils/nlpParser';
 import ChatBubble from '../components/ChatBubble';
 import { colors, globalStyles, spacing, borderRadius, shadows } from '../styles/globalStyles';
@@ -101,7 +101,7 @@ const ChatScreen = () => {
               rippleColor="#F2F7F5"
               rippleContainerBorderRadius={20}
             >
-              <Icon 
+              <MaterialIcons 
                 name="send" 
                 size={20} 
                 color={input.trim() ? '#F2F7F5' : '#999'} 
