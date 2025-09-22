@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { 
   View, 
   Text, 
@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { parseReminderText } from '../utils/nlpParser';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatCreateScreen = ({ navigation }) => {
   const [message, setMessage] = useState('');
@@ -18,38 +19,65 @@ const ChatCreateScreen = ({ navigation }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  const handleSend = () => {
+  const _saveDataToArray = async (value) => {
+    try {
+      const existingData = await AsyncStorage.getItem('reminders');
+      let dataArray = existingData ? JSON.parse(existingData) : [];
+      
+      dataArray.push(value);
+      
+      // Save back to AsyncStorage
+      await AsyncStorage.setItem('reminders', JSON.stringify(dataArray));
+    } catch (e) {
+      console.error("Failed to save data to array", e);
+    }
+  }
+
+  const handleSend = async () => {
     if (!message.trim()) return;
     
     setIsProcessing(true);
     Keyboard.dismiss();
-    
-    // Simulate AI processing
-    setTimeout(() => {
-      const parsed = parseReminderText(message);
+
+    console.log("Calling GPT")
+    // Simulate AI processing bruh
+    const parsed = await parseReminderText(message);
+    console.log(JSON.stringify(parsed))
+
+    if ("error" in parsed) {
+      // THe user doesn't chat about tasks
+      setAiResult({
+        text: parsed.error,
+        time: "--",
+        location: "--",
+        priority: "--"
+      });
+
+    } else {
       setAiResult({
         text: parsed.title,
-        time: parsed.timeInfo || "5:00 PM",
-        location: parsed.locationInfo || "Current Location",
+        time: parsed.timeInfo || "5:00 pm",
+        location: parsed.locationInfo || "current location",
         priority: parsed.priority
       });
-      setIsProcessing(false);
-      
-      // Animate result
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-    }, 1500);
+    }
+    setIsProcessing(false);
+    
+    // Animate result
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
   };
 
   const handleEdit = () => {
     navigation.navigate('NewPebble', { ...aiResult });
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     // TODO: Create reminder using reminderService
+    await _saveDataToArray(aiResult);
     console.log('Creating reminder:', aiResult);
     navigation.navigate('HomeMain');
   };
@@ -135,7 +163,7 @@ const ChatCreateScreen = ({ navigation }) => {
               (!message.trim() || aiResult || isProcessing) && styles.sendBtnDisabled
             ]} 
             onPress={handleSend} 
-            disabled={!message.trim() || aiResult || isProcessing}
+            disabled={!message.trim() || !!aiResult || isProcessing}
           >
             <MaterialIcons
               name="send" 
