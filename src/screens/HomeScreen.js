@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Ripple from 'react-native-material-ripple';
 import PebbleButton from '../components/PebbleButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
@@ -51,9 +52,11 @@ const HomeScreen = ({ navigation }) => {
         }
     };
 
-    React.useEffect(() => {
-        getReminders();
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            getReminders();
+        }, [])
+    );
 
 
     const mapRegion = {
