@@ -24,12 +24,10 @@ const ChatCreateScreen = ({ navigation }) => {
       const existingData = await AsyncStorage.getItem('reminders');
       let dataArray = existingData ? JSON.parse(existingData) : [];
       
-      console.log('Saving data')
       dataArray.push(value);
       
       // Save back to AsyncStorage
       await AsyncStorage.setItem('reminders', JSON.stringify(dataArray));
-      console.log(await AsyncStorage.getItem('reminders'));
     } catch (e) {
       console.error("Failed to save data to array", e);
     }
@@ -80,7 +78,6 @@ const ChatCreateScreen = ({ navigation }) => {
   const handleConfirm = async () => {
     // TODO: Create reminder using reminderService
     await _saveDataToArray(aiResult);
-    console.log(await AsyncStorage.getItem('reminders'));
     console.log('Creating reminder:', aiResult);
     navigation.navigate('HomeMain');
   };
