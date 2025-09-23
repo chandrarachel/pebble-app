@@ -10,7 +10,7 @@ import {
     Dimensions
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, Feather } from '@expo/vector-icons';
 import Ripple from 'react-native-material-ripple';
 
 const { width } = Dimensions.get('window');
@@ -122,7 +122,7 @@ const HomeScreen = ({ navigation }) => {
                         rippleOpacity={0.3}
                         rippleContainerBorderRadius={25}
                     >
-                        <Text style={styles.avatarText}>AB</Text>
+                        <Text style={styles.avatarText}>JD</Text>
                     </Ripple>
                 </View>
 
@@ -130,7 +130,7 @@ const HomeScreen = ({ navigation }) => {
                     <MaterialIcons name="search" size={20} color="#999" style={styles.searchIcon} />
                     <TextInput
                         style={styles.searchInput}
-                        placeholder="Search Reminders"
+                        placeholder="Search Pebbles"
                         placeholderTextColor="#999"
                         value={searchText}
                         onChangeText={setSearchText}
@@ -138,7 +138,7 @@ const HomeScreen = ({ navigation }) => {
                 </View>
 
                 <TouchableOpacity style={styles.menuButton}>
-                    <MaterialIcons name="tune" size={24} color="#5C8374" />
+                    <Feather name="bell" size={24} color="#5C8374" />
                 </TouchableOpacity>
             </View>
 

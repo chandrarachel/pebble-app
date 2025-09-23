@@ -9,6 +9,7 @@ import {
   Animated
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { parseReminderText } from '../utils/nlpParser';
 
@@ -64,87 +65,95 @@ const ChatCreateScreen = ({ navigation }) => {
         <View style={{ width: 24 }} />
       </View>
 
-      <View style={styles.content}>
-        <View style={styles.aiBubble}>
-          <Text style={styles.aiBubbleText}>
-            Hi! I'm your Pebble assistant. Tell me what you'd like to be reminded about! 🪨
-          </Text>
-        </View>
-
-        {message && (
-          <View style={styles.userBubble}>
-            <Text style={styles.userBubbleText}>{message}</Text>
+      <View style={{ flex: 1 }}>
+        <View style={styles.content}>
+          <View style={styles.aiBubble}>
+            <Text style={styles.aiBubbleText}>
+              Hi! I'm your Pebble assistant. Tell me what you'd like to be reminded about! 🪨
+            </Text>
           </View>
-        )}
 
-        {isProcessing && (
-          <View style={styles.processingBubble}>
-            <Text style={styles.processingText}>Understanding your request...</Text>
-          </View>
-        )}
+          {message && (
+            <View style={styles.userBubble}>
+              <Text style={styles.userBubbleText}>{message}</Text>
+            </View>
+          )}
 
-        {aiResult && (
-          <Animated.View style={[styles.summaryCard, { opacity: fadeAnim }]}>
-            <Text style={styles.summaryTitle}>Here's what I understood:</Text>
-            
-            <View style={styles.summaryItem}>
-              <MaterialIcons name="task-alt" size={18} color="#5C8374" />
-              <Text style={styles.summaryText}>{aiResult.text}</Text>
+          {isProcessing && (
+            <View style={styles.processingBubble}>
+              <Text style={styles.processingText}>Understanding your request...</Text>
             </View>
-            
-            <View style={styles.summaryItem}>
-              <MaterialIcons name="access-time" size={18} color="#5C8374" />
-              <Text style={styles.summaryText}>{aiResult.time}</Text>
-            </View>
-            
-            <View style={styles.summaryItem}>
-              <MaterialIcons name="location-on" size={18} color="#5C8374" />
-              <Text style={styles.summaryText}>{aiResult.location}</Text>
-            </View>
+          )}
 
-            <View style={styles.summaryActions}>
-              <TouchableOpacity style={styles.editBtn} onPress={handleEdit}>
-                <MaterialIcons name="edit" size={16} color="#5C8374" />
-                <Text style={styles.editBtnText}>Edit Details</Text>
-              </TouchableOpacity>
+          {aiResult && (
+            <Animated.View style={[styles.summaryCard, { opacity: fadeAnim }]}>
+              <Text style={styles.summaryTitle}>Here's what I understood:</Text>
               
-              <TouchableOpacity style={styles.confirmBtn} onPress={handleConfirm}>
-                <MaterialIcons name="check-circle" size={16} color="#fff" />
-                <Text style={styles.confirmBtnText}>Create Pebble</Text>
-              </TouchableOpacity>
-            </View>
-          </Animated.View>
-        )}
-      </View>
+              <View style={styles.summaryItem}>
+                <MaterialIcons name="task-alt" size={18} color="#5C8374" />
+                <Text style={styles.summaryText}>{aiResult.text}</Text>
+              </View>
+              
+              <View style={styles.summaryItem}>
+                <MaterialIcons name="access-time" size={18} color="#5C8374" />
+                <Text style={styles.summaryText}>{aiResult.time}</Text>
+              </View>
+              
+              <View style={styles.summaryItem}>
+                <MaterialIcons name="location-on" size={18} color="#5C8374" />
+                <Text style={styles.summaryText}>{aiResult.location}</Text>
+              </View>
 
-      <View style={styles.inputContainer}>
-        <View style={styles.inputWrapper}>
-          <TextInput
-            style={styles.input}
-            placeholder="Remind me to buy groceries at 5pm..."
-            value={message}
-            onChangeText={setMessage}
-            onSubmitEditing={handleSend}
-            editable={!aiResult && !isProcessing}
-            returnKeyType="send"
-            multiline
-          />
-          <TouchableOpacity 
-            style={[
-              styles.sendBtn,
-              (!message.trim() || aiResult || isProcessing) && styles.sendBtnDisabled
-            ]} 
-            onPress={handleSend} 
-            disabled={!message.trim() || aiResult || isProcessing}
-          >
-            <MaterialIcons
-              name="send" 
-              size={20} 
-              color={message.trim() && !aiResult && !isProcessing ? "#F2F7F5" : "#999"} 
-            />
-          </TouchableOpacity>
+              <View style={styles.summaryActions}>
+                <TouchableOpacity style={styles.editBtn} onPress={handleEdit}>
+                  <MaterialIcons name="edit" size={16} color="#5C8374" />
+                  <Text style={styles.editBtnText}>Edit Details</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity style={styles.confirmBtn} onPress={handleConfirm}>
+                  <MaterialIcons name="check-circle" size={16} color="#fff" />
+                  <Text style={styles.confirmBtnText}>Create Pebble</Text>
+                </TouchableOpacity>
+              </View>
+            </Animated.View>
+          )}
         </View>
       </View>
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={0}
+        style={{ position: 'absolute', left: 0, right: 0, bottom: 0, width: '100%' }}
+      >
+        <View style={[styles.inputContainer, { paddingBottom: 20, marginBottom: 0 }]}> 
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.input}
+              placeholder="Remind me to buy groceries at 5pm..."
+              value={message}
+              onChangeText={setMessage}
+              onSubmitEditing={handleSend}
+              editable={!aiResult && !isProcessing}
+              returnKeyType="send"
+              multiline
+            />
+            <TouchableOpacity 
+              style={[
+                styles.sendBtn,
+                (!message.trim() || aiResult || isProcessing) && styles.sendBtnDisabled
+              ]} 
+              onPress={handleSend} 
+              disabled={!message.trim() || aiResult || isProcessing}
+            >
+              <MaterialIcons
+                name="send" 
+                size={20} 
+                color={message.trim() && !aiResult && !isProcessing ? "#F2F7F5" : "#999"} 
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -197,7 +206,7 @@ const styles = StyleSheet.create({
   },
   confirmBtnText: { color: '#FFFFFF', fontWeight: '600', fontSize: 14, marginLeft: 6 },
   inputContainer: {
-    padding: 20, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E0E0E0',
+    padding: 18, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E0E0E0',
   },
   inputWrapper: {
     flexDirection: 'row', alignItems: 'flex-end', backgroundColor: '#F2F7F5',
