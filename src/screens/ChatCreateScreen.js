@@ -85,7 +85,7 @@ const ChatCreateScreen = ({ navigation }) => {
             </View>
           )}
 
-          {aiResult && (
+          {!!aiResult && (
             <Animated.View style={[styles.summaryCard, { opacity: fadeAnim }]}>
               <Text style={styles.summaryTitle}>Here's what I understood:</Text>
               
@@ -140,10 +140,10 @@ const ChatCreateScreen = ({ navigation }) => {
             <TouchableOpacity 
               style={[
                 styles.sendBtn,
-                (!message.trim() || aiResult || isProcessing) && styles.sendBtnDisabled
+                (!message.trim() || !!aiResult || isProcessing) && styles.sendBtnDisabled
               ]} 
               onPress={handleSend} 
-              disabled={!message.trim() || aiResult || isProcessing}
+              disabled={!message.trim() || !!aiResult || isProcessing}
             >
               <MaterialIcons
                 name="send" 
