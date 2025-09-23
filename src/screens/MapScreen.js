@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -6,22 +7,7 @@ import * as Location from 'expo-location';
 import { useNavigation } from '@react-navigation/native';
 
 
-const mockReminders = [
-  {
-    id: '1',
-    title: 'Buy groceries',
-    latitude: 37.78825,
-    longitude: -122.4324,
-    priority: 'high'
-  },
-  {
-    id: '2',
-    title: 'Pick up dry cleaning',
-    latitude: 37.79025,
-    longitude: -122.4344,
-    priority: 'medium'
-  }
-];
+// Removed mockReminders. Will load from AsyncStorage.
 
 const MapScreen = () => {
   const [reminders, setReminders] = useState([]);
@@ -44,7 +30,15 @@ const MapScreen = () => {
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       });
-      setReminders(mockReminders);
+      // Load reminders from AsyncStorage
+      try {
+        const jsonValue = await AsyncStorage.getItem('reminders');
+        const savedReminders = jsonValue != null ? JSON.parse(jsonValue) : [];
+        setReminders(savedReminders);
+      } catch (e) {
+        console.error("Failed to fetch reminders from storage", e);
+        setReminders([]);
+      }
       setLoading(false);
     })();
   }, []);
@@ -73,9 +67,9 @@ const MapScreen = () => {
         showsUserLocation={true}
         showsMyLocationButton={true}
       >
-        {reminders.map((reminder) => (
+        {reminders.map((reminder, idx) => (
           <Marker
-            key={reminder.id}
+            key={reminder.id ? String(reminder.id) : `reminder-${idx}`}
             coordinate={{
               latitude: reminder.latitude,
               longitude: reminder.longitude,

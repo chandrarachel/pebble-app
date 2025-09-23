@@ -13,6 +13,7 @@ import { KeyboardAvoidingView, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { parseReminderText } from '../utils/nlpParser';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { formatLocalDateTime } from '../utils/formatLocalDateTime';
 
 const ChatCreateScreen = ({ navigation }) => {
   const [message, setMessage] = useState('');
@@ -124,7 +125,7 @@ const ChatCreateScreen = ({ navigation }) => {
               
               <View style={styles.summaryItem}>
                 <MaterialIcons name="access-time" size={18} color="#5C8374" />
-                <Text style={styles.summaryText}>{aiResult.time}</Text>
+                <Text style={styles.summaryText}>{formatLocalDateTime(aiResult.time)}</Text>
               </View>
               
               <View style={styles.summaryItem}>

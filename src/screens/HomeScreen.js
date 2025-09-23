@@ -15,7 +15,7 @@ import Ripple from 'react-native-material-ripple';
 import PebbleButton from '../components/PebbleButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
-
+import { formatLocalDateTime  } from '../utils/formatLocalDateTime';
 
 const { width } = Dimensions.get('window');
 
@@ -111,14 +111,14 @@ const HomeScreen = ({ navigation }) => {
                         ]}>
                             {item.text}
                         </Text>
-                        <View style={styles.reminderMeta}>
-                            <View style={styles.timeContainer}>
-                                <MaterialIcons name="access-time" size={14} color="#6EC6CA" />
-                                <Text style={styles.metaText}>{item.time}</Text>
+                        <View style={styles.reminderMetaRow}>
+                            <View style={styles.reminderMetaItem}>
+                                <MaterialIcons name="access-time" size={16} color="#6EC6CA" style={{marginRight: 4}} />
+                                <Text style={styles.metaText}>{formatLocalDateTime(item.time)}</Text>
                             </View>
-                            <View style={styles.locationContainer}>
-                                <MaterialIcons name="location-on" size={14} color="#6EC6CA" />
-                                <Text style={styles.metaText}>{item.location}</Text>
+                            <View style={styles.reminderMetaItem}>
+                                <MaterialIcons name="location-on" size={16} color="#6EC6CA" style={{marginRight: 4}} />
+                                <Text style={[styles.metaText, styles.locationText]} numberOfLines={1} ellipsizeMode="tail">{item.location || 'No location'}</Text>
                             </View>
                         </View>
                         {item.tag && (
@@ -392,38 +392,37 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#E0E0E0',
     },
-    reminderContent: {
-        flex: 1,
+    reminderMetaRow: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        marginTop: 8,
+        marginBottom: 2,
+        gap: 2,
     },
-    reminderTitle: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#232D3F',
-        marginBottom: 8,
-    },
-    completedText: {
-        textDecorationLine: 'line-through',
-        color: '#999',
-    },
-    reminderMeta: {
+    reminderMetaItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 8,
-    },
-    timeContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginRight: 16,
-    },
-    locationContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
+        backgroundColor: '#F2F7F5',
+        borderRadius: 10,
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+        marginBottom: 2,
+        minWidth: 0,
+        maxWidth: '100%',
     },
     metaText: {
-        fontSize: 14,
-        color: '#666',
-        marginLeft: 4,
+        fontSize: 15,
+        color: '#6C757D',
+        marginLeft: 2,
+        flexShrink: 1,
+        flexWrap: 'wrap',
+    },
+    locationText: {
+        fontWeight: '500',
+        color: '#5C8374',
+        maxWidth: 180,
+        flexShrink: 1,
+        flexWrap: 'wrap',
     },
     tagContainer: {
         alignSelf: 'flex-start',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { format, parseISO, isValid } from 'date-fns';
+import { formatLocalDateTime } from '../utils/formatLocalDateTime';
 import {
     View,
     Text,
@@ -123,7 +123,7 @@ const NewPebbleScreen = ({ navigation, route }) => {
                                 size={20}
                                 color={timeEnabled ? colors.pebble.aqua : colors.neutral.gray300}
                             />
-                            <Text style={[styles.sectionLabel, { marginLeft: spacing.sm }]}>Time Reminder</Text>
+                            <Text style={[styles.sectionLabel, { marginLeft: spacing.sm }]}>Date & Time</Text>
                         </View>
                         <Switch
                             value={timeEnabled}
@@ -136,18 +136,7 @@ const NewPebbleScreen = ({ navigation, route }) => {
                     {timeEnabled && (
                         <TouchableOpacity style={[globalStyles.card, styles.optionCard]}>
                             <Text style={styles.optionText}>
-                                {(() => {
-                                    let localString = selectedTime;
-                                    // If input is ISO with Z (UTC), remove Z to treat as local
-                                    if (typeof localString === 'string' && localString.endsWith('Z')) {
-                                        localString = localString.replace(/Z$/, '');
-                                    }
-                                    let dateObj = typeof localString === 'string' && localString.includes('T')
-                                        ? new Date(localString)
-                                        : new Date(localString);
-                                    if (!isValid(dateObj)) return selectedTime;
-                                    return format(dateObj, 'EEEE, MMMM do, yyyy hh:mm a');
-                                })()}
+                                                                {formatLocalDateTime(selectedTime)}
                             </Text>
                             <MaterialIcons name="chevron-right" size={20} color={colors.neutral.gray400} />
                         </TouchableOpacity>
@@ -162,7 +151,7 @@ const NewPebbleScreen = ({ navigation, route }) => {
                                 size={20}
                                 color={locationEnabled ? colors.pebble.aqua : colors.neutral.gray300}
                             />
-                            <Text style={[styles.sectionLabel, { marginLeft: spacing.sm }]}>Location Reminder</Text>
+                            <Text style={[styles.sectionLabel, { marginLeft: spacing.sm }]}>Location</Text>
                         </View>
                         <Switch
                             value={locationEnabled}
@@ -223,9 +212,9 @@ const NewPebbleScreen = ({ navigation, route }) => {
 
                 {(timeEnabled || locationEnabled) && (
                     <View style={[globalStyles.card, styles.summaryCard]}>
-                        <Text style={styles.summaryTitle}>📍 Reminder Summary</Text>
+                        <Text style={styles.summaryTitle}>Reminder Summary</Text>
                         {timeEnabled && (
-                            <Text style={styles.summaryItem}>⏰ {selectedTime}</Text>
+                            <Text style={styles.summaryItem}>⏰ {formatLocalDateTime(selectedTime)}</Text>
                         )}
                         {locationEnabled && (
                             <Text style={styles.summaryItem}>📍 When near {selectedLocation}</Text>
@@ -239,7 +228,7 @@ const NewPebbleScreen = ({ navigation, route }) => {
                 <View style={{ height: 100 }} />
             </ScrollView>
 
-            <View style={styles.createButtonContainer}>
+            <View style={{ position: 'absolute', left: 16, right: 0, bottom: 20, width: '92%'  }}>
                 <PebbleButton
                     title="Create Pebble"
                     onPress={handleCreatePebble}
