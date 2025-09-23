@@ -9,11 +9,12 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^2.1.2",
+    "@react-native-async-storage/async-storage": "2.2.0",
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
     "aws-amplify": "^6.0.0",
+    "date-fns": "^4.1.0",
     "expo": "^54.0.10",
     "expo-calendar": "~15.0.7",
     "expo-location": "~19.0.7",
@@ -26,9 +27,9 @@
     "react-native-material-ripple": "^0.9.1",
     "react-native-paper": "^5.14.5",
     "react-native-push-notification": "^8.1.1",
-    "react-native-reanimated": "~3.17.4",
-    "react-native-safe-area-context": "^5.4.0",
-    "react-native-screens": "~4.11.1",
+    "react-native-reanimated": "~4.1.0",
+    "react-native-safe-area-context": "~5.6.0",
+    "react-native-screens": "~4.16.0",
     "react-native-vector-icons": "^9.2.0"
   },
   "devDependencies": {

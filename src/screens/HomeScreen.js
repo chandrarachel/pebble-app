@@ -205,7 +205,7 @@ const HomeScreen = ({ navigation }) => {
                         <Text style={styles.sectionTitle}>Upcoming Pebbles</Text>
                         <Ripple
                             style={styles.seeAllButton}
-                            onPress={() => navigation?.navigate('Map')}
+                            onPress={() => navigation?.navigate('Calendar')}
                             rippleColor="#5C8374"
                             rippleOpacity={0.3}
                             rippleContainerBorderRadius={12}

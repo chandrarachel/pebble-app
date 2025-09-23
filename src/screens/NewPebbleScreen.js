@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { format, parseISO, isValid } from 'date-fns';
 import {
     View,
     Text,
@@ -99,7 +100,7 @@ const NewPebbleScreen = ({ navigation, route }) => {
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <MaterialIcons name="close" size={24} color={colors.pebble.slate} />
                 </TouchableOpacity>
-                <Text style={globalStyles.headerTitle}>New Pebble</Text>
+                <Text style={globalStyles.headerTitle}>Edit Pebble</Text>
                 <View style={{ width: 24 }} />
             </View>
 
@@ -134,7 +135,20 @@ const NewPebbleScreen = ({ navigation, route }) => {
 
                     {timeEnabled && (
                         <TouchableOpacity style={[globalStyles.card, styles.optionCard]}>
-                            <Text style={styles.optionText}>{selectedTime}</Text>
+                            <Text style={styles.optionText}>
+                                {(() => {
+                                    let localString = selectedTime;
+                                    // If input is ISO with Z (UTC), remove Z to treat as local
+                                    if (typeof localString === 'string' && localString.endsWith('Z')) {
+                                        localString = localString.replace(/Z$/, '');
+                                    }
+                                    let dateObj = typeof localString === 'string' && localString.includes('T')
+                                        ? new Date(localString)
+                                        : new Date(localString);
+                                    if (!isValid(dateObj)) return selectedTime;
+                                    return format(dateObj, 'EEEE, MMMM do, yyyy hh:mm a');
+                                })()}
+                            </Text>
                             <MaterialIcons name="chevron-right" size={20} color={colors.neutral.gray400} />
                         </TouchableOpacity>
                     )}
