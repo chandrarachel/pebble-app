@@ -47,5 +47,5 @@ export const deleteTask = async (id: string): Promise<boolean> => {
         .where(eq(tasks.id, id))
         .then(res => res);
 
-    return result > 0;
+    return result.rowCount ? true : false;
 }

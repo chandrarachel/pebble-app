@@ -24,4 +24,5 @@ yarn-error.log*
 amplify/.config/local-env-info.json
 amplify/backend/.env
 
-build/
+test
+android

@@ -50,8 +50,8 @@ export class AuthService {
         return { token, user };
     }
 
-    async register(user: User, password: string){
-        const existingUser = await getUserByEmail(user.email);
+    async register(user: Partial<User>, password: string){
+        const existingUser = await getUserByEmail(user.email!);
         if(existingUser){
             throw new Error('Email already in use');
         }

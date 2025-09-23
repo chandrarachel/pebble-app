@@ -25,7 +25,7 @@ const ChatScreen = () => {
   ]);
   const [input, setInput] = useState('');
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
     
     const userMessage = {
@@ -38,18 +38,16 @@ const ChatScreen = () => {
     setMessages(prev => [...prev, userMessage]);
     
     // Parse the input using NLP
-    const parsedData = parseReminderText(input);
+    const parsedData = await parseReminderText(input);
     
-    setTimeout(() => {
-      const botResponse = {
-        id: (Date.now() + 1).toString(),
-        text: generateBotResponse(parsedData),
-        sender: 'bot',
-        timestamp: new Date(),
-        parsedData // Store for potential reminder creation
-      };
-      setMessages(prev => [...prev, botResponse]);
-    }, 1000);
+    const botResponse = {
+      id: (Date.now() + 1).toString(),
+      text: "text" in parsedData ? parsedData.text : generateBotResponse(parsedData),
+      sender: 'bot',
+      timestamp: new Date(),
+      parsedData: "text" in parsedData ? null : parsedData  // Store for potential reminder creation
+    };
+    setMessages(prev => [...prev, botResponse]);
     
     setInput('');
   };

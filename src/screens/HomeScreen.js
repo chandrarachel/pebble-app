@@ -12,12 +12,17 @@ import {
 import MapView, { Marker } from 'react-native-maps';
 import { MaterialIcons, Feather } from '@expo/vector-icons';
 import Ripple from 'react-native-material-ripple';
+import PebbleButton from '../components/PebbleButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 const { width } = Dimensions.get('window');
 
 const HomeScreen = ({ navigation }) => {
     const [searchText, setSearchText] = useState('');
     const fadeAnim = useRef(new Animated.Value(0)).current;
+    const [reminders, setReminders] = useState([]);
 
     const mockReminders = [
         {
@@ -38,6 +43,22 @@ const HomeScreen = ({ navigation }) => {
             priority: 'high'
         }
     ];
+
+    const getReminders = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('reminders');
+            setReminders(jsonValue != null ? JSON.parse(jsonValue) : []);
+        } catch (e) {
+            console.error("Failed to fetch reminders from storage", e);
+        }
+    };
+
+    useFocusEffect(
+        React.useCallback(() => {
+            getReminders();
+        }, [])
+    );
+
 
     const mapRegion = {
         latitude: 37.7749,
@@ -88,7 +109,7 @@ const HomeScreen = ({ navigation }) => {
                             styles.reminderTitle,
                             item.completed && styles.completedText
                         ]}>
-                            {item.title}
+                            {item.text}
                         </Text>
                         <View style={styles.reminderMeta}>
                             <View style={styles.timeContainer}>
@@ -193,8 +214,8 @@ const HomeScreen = ({ navigation }) => {
                         </Ripple>
                     </View>
 
-                    {mockReminders.map((item, index) => (
-                        <ReminderCard key={item.id} item={item} index={index} />
+                    {reminders.map((item, index) => (
+                        <ReminderCard key={index} item={item} index={index} />
                     ))}
                 </View>
 
