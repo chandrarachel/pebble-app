@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { formatLocalDateTime } from '../utils/formatLocalDateTime';
 import {
     View,
     Text,
@@ -99,7 +100,7 @@ const NewPebbleScreen = ({ navigation, route }) => {
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <MaterialIcons name="close" size={24} color={colors.pebble.slate} />
                 </TouchableOpacity>
-                <Text style={globalStyles.headerTitle}>New Pebble</Text>
+                <Text style={globalStyles.headerTitle}>Edit Pebble</Text>
                 <View style={{ width: 24 }} />
             </View>
 
@@ -122,7 +123,7 @@ const NewPebbleScreen = ({ navigation, route }) => {
                                 size={20}
                                 color={timeEnabled ? colors.pebble.aqua : colors.neutral.gray300}
                             />
-                            <Text style={[styles.sectionLabel, { marginLeft: spacing.sm }]}>Time Reminder</Text>
+                            <Text style={[styles.sectionLabel, { marginLeft: spacing.sm }]}>Date & Time</Text>
                         </View>
                         <Switch
                             value={timeEnabled}
@@ -134,7 +135,9 @@ const NewPebbleScreen = ({ navigation, route }) => {
 
                     {timeEnabled && (
                         <TouchableOpacity style={[globalStyles.card, styles.optionCard]}>
-                            <Text style={styles.optionText}>{selectedTime}</Text>
+                            <Text style={styles.optionText}>
+                                                                {formatLocalDateTime(selectedTime)}
+                            </Text>
                             <MaterialIcons name="chevron-right" size={20} color={colors.neutral.gray400} />
                         </TouchableOpacity>
                     )}
@@ -148,7 +151,7 @@ const NewPebbleScreen = ({ navigation, route }) => {
                                 size={20}
                                 color={locationEnabled ? colors.pebble.aqua : colors.neutral.gray300}
                             />
-                            <Text style={[styles.sectionLabel, { marginLeft: spacing.sm }]}>Location Reminder</Text>
+                            <Text style={[styles.sectionLabel, { marginLeft: spacing.sm }]}>Location</Text>
                         </View>
                         <Switch
                             value={locationEnabled}
@@ -209,9 +212,9 @@ const NewPebbleScreen = ({ navigation, route }) => {
 
                 {(timeEnabled || locationEnabled) && (
                     <View style={[globalStyles.card, styles.summaryCard]}>
-                        <Text style={styles.summaryTitle}>📍 Reminder Summary</Text>
+                        <Text style={styles.summaryTitle}>Reminder Summary</Text>
                         {timeEnabled && (
-                            <Text style={styles.summaryItem}>⏰ {selectedTime}</Text>
+                            <Text style={styles.summaryItem}>⏰ {formatLocalDateTime(selectedTime)}</Text>
                         )}
                         {locationEnabled && (
                             <Text style={styles.summaryItem}>📍 When near {selectedLocation}</Text>
@@ -225,7 +228,7 @@ const NewPebbleScreen = ({ navigation, route }) => {
                 <View style={{ height: 100 }} />
             </ScrollView>
 
-            <View style={styles.createButtonContainer}>
+            <View style={{ position: 'absolute', left: 16, right: 0, bottom: 20, width: '92%'  }}>
                 <PebbleButton
                     title="Create Pebble"
                     onPress={handleCreatePebble}
