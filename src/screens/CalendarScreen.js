@@ -164,6 +164,16 @@ const CalendarScreen = ({ navigation }) => {
             {/* Header */}
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>Calendar</Text>
+                <TouchableOpacity 
+                    style={styles.todayButton}
+                    onPress={() => {
+                        const today = new Date();
+                        setCurrentDate(new Date(today.getFullYear(), today.getMonth(), 1));
+                        setSelectedDate(today.getDate());
+                    }}
+                >
+                    <Text style={styles.todayButtonText}>Today</Text>
+                </TouchableOpacity>
             </View>
 
             <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -257,6 +267,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#F2F7F5',
     },
     header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         paddingHorizontal: 20,
         paddingTop: 20,
         paddingBottom: 16,
@@ -266,7 +279,17 @@ const styles = StyleSheet.create({
         fontSize: 28,
         fontWeight: 'bold',
         color: '#232D3F',
-        textAlign: 'center',
+    },
+    todayButton: {
+        backgroundColor: '#6EC6CA',
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        borderRadius: 20,
+    },
+    todayButtonText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#FFFFFF',
     },
     content: {
         flex: 1,
