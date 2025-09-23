@@ -11,7 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const { width } = Dimensions.get('window');
+const { width: windowWidth } = Dimensions.get('window');
 
 const CalendarScreen = ({ navigation }) => {
     const [currentDate, setCurrentDate] = useState(new Date(2025, 3, 25)); // April 25, 2025
@@ -315,11 +315,15 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
     },
     emptyDay: {
-        width: (width - 80) / 7,
+        flexBasis: '14.2857%',
+        flexGrow: 1,
+        flexShrink: 1,
         height: 40,
     },
     dayContainer: {
-        width: (width - 80) / 7,
+        flexBasis: '14.2857%',
+        flexGrow: 1,
+        flexShrink: 1,
         height: 40,
         justifyContent: 'center',
         alignItems: 'center',

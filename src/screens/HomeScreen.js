@@ -180,7 +180,18 @@ const HomeScreen = ({ navigation }) => {
 
                 {/* Upcoming Pebbles Section */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Upcoming Pebbles</Text>
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>Upcoming Pebbles</Text>
+                        <Ripple
+                            style={styles.seeAllButton}
+                            onPress={() => navigation?.navigate('Map')}
+                            rippleColor="#5C8374"
+                            rippleOpacity={0.3}
+                            rippleContainerBorderRadius={12}
+                        >
+                            <Text style={styles.seeAllText}>See All</Text>
+                        </Ripple>
+                    </View>
 
                     {mockReminders.map((item, index) => (
                         <ReminderCard key={item.id} item={item} index={index} />
@@ -308,11 +319,29 @@ const styles = StyleSheet.create({
     section: {
         paddingHorizontal: 20,
     },
+    sectionHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 16,
+    },
     sectionTitle: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#232D3F',
-        marginBottom: 16,
+    },
+    seeAllButton: {
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 12,
+        backgroundColor: '#F2F7F5',
+        borderWidth: 1,
+        borderColor: '#5C8374',
+    },
+    seeAllText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#5C8374',
     },
     reminderCard: {
         marginBottom: 12,

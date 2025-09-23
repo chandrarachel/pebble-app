@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-nat
 import MapView, { Marker } from 'react-native-maps';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
+import { useNavigation } from '@react-navigation/native';
 
 
 const mockReminders = [
@@ -26,6 +27,7 @@ const MapScreen = () => {
   const [reminders, setReminders] = useState([]);
   const [region, setRegion] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
     (async () => {
@@ -86,7 +88,7 @@ const MapScreen = () => {
           </Marker>
         ))}
       </MapView>
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('ChatCreate')}>
         <MaterialIcons name="add" size={24} color="#F2F7F5" />
       </TouchableOpacity>
     </View>
