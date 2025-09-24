@@ -12,7 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
-import { getMonth } from 'date-fns';
+import { format } from 'date-fns';
 
 const { width: windowWidth } = Dimensions.get('window');
 
@@ -158,7 +158,7 @@ const CalendarScreen = ({ navigation }) => {
                 <View style={styles.reminderMeta}>
                     <View style={styles.timeContainer}>
                         <MaterialIcons name="access-time" size={14} color="#6EC6CA" />
-                        <Text style={styles.metaText}>{new Date(reminder.time).toLocaleTimeString()}</Text>
+                        <Text style={styles.metaText}>{format(new Date(reminder.time), 'hh:mm a')}</Text>
                     </View>
                     <View style={styles.locationContainer}>
                         <MaterialIcons name="location-on" size={14} color="#6EC6CA" />
