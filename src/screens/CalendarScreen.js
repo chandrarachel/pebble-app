@@ -10,6 +10,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import ReminderCard from '../components/ReminderCard';
 
 const { width: windowWidth } = Dimensions.get('window');
 
@@ -27,18 +30,21 @@ const CalendarScreen = ({ navigation }) => {
         }).start();
     }, []);
 
+
     // Sample reminders data
-    const reminders = [
-        {
-            id: '1',
-            title: 'Buy groceries',
-            time: '5:00 PM',
-            location: 'Festival Walk',
-            tag: 'Repeat Friday',
-            date: 25,
-            completed: false
+    const [reminders, setReminders] = useState([]);
+
+    const loadReminders = async () => {
+        try {
+            const reminders = await AsyncStorage.getItem('reminders');
+            if (reminders !== null) {
+                setReminders(JSON.parse(reminders));
+
+            }
+        } catch (error) {
+            console.error('Error loading reminders:', error);
         }
-    ];
+    }
 
     const months = [
         'January', 'February', 'March', 'April', 'May', 'June',
@@ -75,6 +81,12 @@ const CalendarScreen = ({ navigation }) => {
         return days;
     };
 
+    useFocusEffect(
+        React.useCallback(() => {
+            loadReminders();
+        }, [])
+    );
+
     const navigateMonth = (direction) => {
         const newDate = new Date(currentDate);
         newDate.setMonth(currentDate.getMonth() + direction);
@@ -86,11 +98,11 @@ const CalendarScreen = ({ navigation }) => {
     };
 
     const hasReminder = (day) => {
-        return reminders.some(reminder => reminder.date === day);
+        return reminders.some(reminder => new Date(reminder.time).getDate() === day);
     };
 
     const getRemindersForDate = (day) => {
-        return reminders.filter(reminder => reminder.date === day);
+        return reminders.filter(reminder => new Date(reminder.time).getDate() === day);
     };
 
     const renderCalendarDay = (day, index) => {
@@ -127,7 +139,7 @@ const CalendarScreen = ({ navigation }) => {
     };
 
     const renderReminderItem = (reminder) => (
-        <View key={reminder.id} style={styles.reminderItem}>
+        <View key={reminder.text} style={styles.reminderItem}>
             <TouchableOpacity style={styles.checkbox}>
                 {reminder.completed ? (
                     <MaterialIcons name="check-circle" size={24} color="#6EC6CA" />
@@ -138,12 +150,12 @@ const CalendarScreen = ({ navigation }) => {
 
             <View style={styles.reminderContent}>
                 <Text style={[styles.reminderTitle, reminder.completed && styles.completedText]}>
-                    {reminder.title}
+                    {reminder.text}
                 </Text>
                 <View style={styles.reminderMeta}>
                     <View style={styles.timeContainer}>
                         <MaterialIcons name="access-time" size={14} color="#6EC6CA" />
-                        <Text style={styles.metaText}>{reminder.time}</Text>
+                        <Text style={styles.metaText}>{new Date(reminder.time).toLocaleTimeString()}</Text>
                     </View>
                     <View style={styles.locationContainer}>
                         <MaterialIcons name="location-on" size={14} color="#6EC6CA" />
