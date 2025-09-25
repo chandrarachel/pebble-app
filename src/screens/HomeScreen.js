@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
     View,
     Text,
@@ -16,6 +16,7 @@ import PebbleButton from '../components/PebbleButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { formatLocalDateTime  } from '../utils/formatLocalDateTime';
+import { registerForPushNotificationsAsync, scheduleNotification, setupNotificationListeners } from '../services/notificationService';
 
 const { width } = Dimensions.get('window');
 
@@ -59,6 +60,26 @@ const HomeScreen = ({ navigation }) => {
         }, [])
     );
 
+    // Set up notifications
+    useEffect(() => {
+        registerForPushNotificationsAsync().then(token => console.log(token));
+
+        const listeners = setupNotificationListeners();
+
+        return () => {
+            listeners.cleanup();
+        };
+    }, []);
+
+    // Handler for bell button press
+    const handleBellPress = async () => {
+        try {
+            await scheduleNotification();
+            console.log('Notification scheduled from bell button');
+        } catch (error) {
+            console.error('Error scheduling notification:', error);
+        }
+    };
 
     const mapRegion = {
         latitude: 37.7749,
@@ -158,7 +179,7 @@ const HomeScreen = ({ navigation }) => {
                     />
                 </View>
 
-                <TouchableOpacity style={styles.menuButton}>
+                <TouchableOpacity style={styles.menuButton} onPress={handleBellPress}>
                     <Feather name="bell" size={24} color="#5C8374" />
                 </TouchableOpacity>
             </View>

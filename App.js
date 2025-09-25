@@ -13,9 +13,13 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import ChatScreen from './src/screens/ChatScreen';
 import ChatCreateScreen from './src/screens/ChatCreateScreen';
 import NewPebbleScreen from './src/screens/NewPebbleScreen';
+import { setupNotificationHandler } from './src/services/notificationService';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+
+// Set up notification handler globally
+setupNotificationHandler(); 
 
 const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
