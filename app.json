@@ -23,7 +23,13 @@
     },
     "web": {},
     "plugins": [
-      "expo-location"
+      "expo-location",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/logo.png"
+        }
+      ]
     ]
   }
 }
