@@ -27,7 +27,11 @@ const HomeScreen = ({ navigation }) => {
     const getReminders = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('reminders');
-            setReminders(jsonValue != null ? JSON.parse(jsonValue) : []);
+            const loadedReminders = jsonValue != null ? JSON.parse(jsonValue) : [];
+            
+            const sortedReminders = loadedReminders.sort((a, b) => new Date(a.time) - new Date(b.time));
+            
+            setReminders(sortedReminders);
         } catch (e) {
             console.error("Failed to fetch reminders from storage", e);
         }
@@ -38,7 +42,6 @@ const HomeScreen = ({ navigation }) => {
             getReminders();
         }, [])
     );
-
     // Set up notifications
     useEffect(() => {
         registerForPushNotificationsAsync().then(token => console.log(token));

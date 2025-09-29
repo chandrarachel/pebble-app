@@ -28,7 +28,7 @@ export const sendNotification = async (title, body, data) => {
       title: title,
       body: body,
       data: { data: data },
-      icon: require('../../assets/logo.png'),
+      icon: require('../../assets/logo.jpg'),
     },
     trigger: null,
   });
@@ -41,7 +41,7 @@ export const scheduleNotification = async () => {
       title: "Scheduled Notification",
       body: 'This is a test notification',
       data: { data: 'goes here' },
-      icon: require('../../assets/logo.png'),
+      icon: require('../../assets/logo.jpg'),
     },
     trigger: triggerTime,
   });
