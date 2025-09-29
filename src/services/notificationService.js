@@ -22,6 +22,18 @@ export const registerForPushNotificationsAsync = async () => {
   }
 };
 
+export const sendNotification = async (title, body, data) => {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: title,
+      body: body,
+      data: { data: data },
+      icon: require('../../assets/logo.png'),
+    },
+    trigger: null,
+  });
+}
+
 export const scheduleNotification = async () => {
   const triggerTime = new Date(Date.now() + 10000); 
   await Notifications.scheduleNotificationAsync({

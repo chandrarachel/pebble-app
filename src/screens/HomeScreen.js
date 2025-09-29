@@ -12,11 +12,10 @@ import {
 import MapView, { Marker } from 'react-native-maps';
 import { MaterialIcons, Feather } from '@expo/vector-icons';
 import Ripple from 'react-native-material-ripple';
-import PebbleButton from '../components/PebbleButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { formatLocalDateTime  } from '../utils/formatLocalDateTime';
-import { registerForPushNotificationsAsync, scheduleNotification, setupNotificationListeners } from '../services/notificationService';
+import { registerForPushNotificationsAsync, scheduleNotification, setupNotificationListeners, sendNotification } from '../services/notificationService';
 
 const { width } = Dimensions.get('window');
 
@@ -24,26 +23,6 @@ const HomeScreen = ({ navigation }) => {
     const [searchText, setSearchText] = useState('');
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const [reminders, setReminders] = useState([]);
-
-    const mockReminders = [
-        {
-            id: '1',
-            title: 'Buy groceries',
-            time: '5:00 PM',
-            location: 'Festival Walk',
-            tag: 'Repeat Friday',
-            completed: false,
-            priority: 'medium'
-        },
-        {
-            id: '2',
-            title: 'Print English script',
-            time: '11:00 AM',
-            location: 'Building E',
-            completed: true,
-            priority: 'high'
-        }
-    ];
 
     const getReminders = async () => {
         try {
@@ -74,7 +53,10 @@ const HomeScreen = ({ navigation }) => {
     // Handler for bell button press
     const handleBellPress = async () => {
         try {
-            await scheduleNotification();
+            const reminder = reminders[0];
+            if (reminder) {
+                await sendNotification('Reminder', reminder.text, { id: reminder.id });
+            }
             console.log('Notification scheduled from bell button');
         } catch (error) {
             console.error('Error scheduling notification:', error);

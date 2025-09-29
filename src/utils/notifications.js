@@ -1,4 +1,3 @@
-// import PushNotification from 'react-native-push-notification'; // removed already
 import { Platform } from 'react-native';
 
 class NotificationService {
