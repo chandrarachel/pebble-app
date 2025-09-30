@@ -15,7 +15,9 @@ import Ripple from 'react-native-material-ripple';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { formatLocalDateTime  } from '../utils/formatLocalDateTime';
-import { registerForPushNotificationsAsync, scheduleNotification, setupNotificationListeners, sendNotification } from '../services/notificationService';
+import { registerForPushNotificationsAsync, setupNotificationListeners, sendNotification } from '../services/notificationService';
+import MapView, { Marker } from 'react-native-maps';
+import * as Location from 'expo-location';
 
 const { width } = Dimensions.get('window');
 
@@ -23,6 +25,12 @@ const HomeScreen = ({ navigation }) => {
     const [searchText, setSearchText] = useState('');
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const [reminders, setReminders] = useState([]);
+    const [region, setRegion] = useState({
+        latitude: 37.7749,
+        longitude: -122.4194,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+    });
 
     const getReminders = async () => {
         try {
