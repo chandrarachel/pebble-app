@@ -32,6 +32,21 @@ const HomeScreen = ({ navigation }) => {
         longitudeDelta: 0.0421,
     });
 
+    const fetchUserLocation = async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            alert('Permission to access location was denied');
+            return;
+        }
+        const location = await Location.getCurrentPositionAsync({});
+        setRegion({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+        });
+    }
+
     const getReminders = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('reminders');
@@ -46,8 +61,9 @@ const HomeScreen = ({ navigation }) => {
     };
 
     useFocusEffect(
-        React.useCallback(() => {
-            getReminders();
+        React.useCallback(async () => {
+            await getReminders();
+            await fetchUserLocation();
         }, [])
     );
     // Set up notifications
@@ -73,14 +89,7 @@ const HomeScreen = ({ navigation }) => {
             console.error('Error scheduling notification:', error);
         }
     };
-
-    const mapRegion = {
-        latitude: 37.7749,
-        longitude: -122.4194,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-    };
-
+    
     React.useEffect(() => {
         Animated.timing(fadeAnim, {
             toValue: 1,
@@ -186,7 +195,7 @@ const HomeScreen = ({ navigation }) => {
                 <View style={styles.mapContainer}>
                     <MapView
                         style={styles.map}
-                        region={mapRegion}
+                        region={region}
                         showsUserLocation={false}
                         scrollEnabled={false}
                         zoomEnabled={false}
