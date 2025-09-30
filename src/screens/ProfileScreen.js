@@ -39,13 +39,25 @@ const ProfileScreen = () => {
   ];
 
   const MenuItem = ({ item }) => (
-    <TouchableOpacity style={styles.menuItem}>
-      <View style={[styles.iconContainer, { backgroundColor: `${item.color}20` }]}>
-        <MaterialIcons name={item.icon} size={24} color={item.color} />
-      </View>
-      <Text style={styles.menuText}>{item.title}</Text>
-      <MaterialIcons name="chevron-right" size={24} color="#999" />
-    </TouchableOpacity>
+      <TouchableOpacity 
+          style={styles.menuItem} 
+          onPress={item.isToggle ? item.onToggle : undefined}
+      >
+          <View style={[styles.iconContainer, { backgroundColor: `${item.color}20` }]}>
+              <MaterialIcons name={item.icon} size={24} color={item.color} />
+          </View>
+          <Text style={styles.menuText}>{item.title}</Text>
+          {item.isToggle ? (
+              <Switch
+                  value={item.value}
+                  onValueChange={item.onToggle}
+                  trackColor={{ false: '#E0E0E0', true: item.color }}
+                  thumbColor="#FFFFFF"
+              />
+          ) : (
+              <MaterialIcons name="chevron-right" size={24} color="#999" />
+          )}
+      </TouchableOpacity>
   );
 
   return (
