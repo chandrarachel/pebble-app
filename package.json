@@ -22,6 +22,7 @@
     "expo-device": "~8.0.8",
     "expo-location": "~19.0.7",
     "expo-notifications": "~0.32.11",
+    "expo-task-manager": "^14.0.7",
     "nativewind": "^2.0.11",
     "notifications": "^0.2.0",
     "react": "19.1.0",

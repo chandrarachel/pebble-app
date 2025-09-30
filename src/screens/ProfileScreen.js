@@ -3,12 +3,39 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const ProfileScreen = () => {
+  const [isLocationTracking, setIsLocationTracking] = useState(false);
+
+  useEffect(() => {
+      checkLocationStatus();
+  }, []);
+
+  const checkLocationStatus = async () => {
+      const isTracking = await backgroundLocationService.isTrackingLocation();
+      setIsLocationTracking(isTracking);
+  };
+
+  const toggleLocationTracking = async () => {
+      try {
+          if (isLocationTracking) {
+              await backgroundLocationService.stopBackgroundLocation();
+              setIsLocationTracking(false);
+          } else {
+              await backgroundLocationService.startBackgroundLocation();
+              setIsLocationTracking(true);
+          }
+      } catch (error) {
+          console.error('Error toggling location tracking:', error);
+          alert('Failed to change location tracking settings. Please check permissions.');
+      }
+  };
+
   const menuItems = [
     { id: '1', title: 'My Groups', icon: 'group', color: '#6EC6CA' },
     { id: '2', title: 'Shared Reminders', icon: 'share', color: '#FFD166' },
     { id: '3', title: 'Notifications', icon: 'notifications', color: '#5C8374' },
     { id: '4', title: 'Privacy Settings', icon: 'security', color: '#232D3F' },
     { id: '5', title: 'Help & Support', icon: 'help', color: '#6EC6CA' },
+    { id: '6', title: 'Location Tracking', icon: 'location-on', color: '#6EC6CA', isToggle: true, value: isLocationTracking, onToggle: toggleLocationTracking },
   ];
 
   const MenuItem = ({ item }) => (

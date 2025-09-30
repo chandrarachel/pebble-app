@@ -18,6 +18,7 @@ import { formatLocalDateTime  } from '../utils/formatLocalDateTime';
 import { registerForPushNotificationsAsync, setupNotificationListeners, sendNotification } from '../services/notificationService';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+import backgroundLocationService from '../services/backgroundTask';
 
 const { width } = Dimensions.get('window');
 
@@ -32,7 +33,7 @@ const HomeScreen = ({ navigation }) => {
         longitudeDelta: 0.0421,
     });
 
-    const fetchUserLocation = async () => {
+    const getUserLocation = async () => {
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
             alert('Permission to access location was denied');
@@ -63,10 +64,10 @@ const HomeScreen = ({ navigation }) => {
     useFocusEffect(
         React.useCallback(async () => {
             await getReminders();
-            await fetchUserLocation();
+            await getUserLocation();
         }, [])
     );
-    // Set up notifications
+
     useEffect(() => {
         registerForPushNotificationsAsync().then(token => console.log(token));
 
@@ -76,6 +77,58 @@ const HomeScreen = ({ navigation }) => {
             listeners.cleanup();
         };
     }, []);
+
+    useEffect(() => {
+        const initializeBackgroundLocation = async () => {
+            try {
+                const isTracking = await backgroundLocationService.isTrackingLocation();
+                if (!isTracking) {
+                    await backgroundLocationService.startBackgroundLocation();
+                }
+            } catch (error) {
+                console.error('Failed to initialize background location:', error);
+                // Show user-friendly error message
+                alert('Location permission is required for location-based reminders to work properly.');
+            }
+        };
+
+        initializeBackgroundLocation();
+    }, []);
+
+    const fetchUserLocation = async () => {
+        try {
+            // First try to get last known location from background service
+            const lastKnown = await backgroundLocationService.getLastKnownLocation();
+            if (lastKnown) {
+                setRegion({
+                    latitude: lastKnown.latitude,
+                    longitude: lastKnown.longitude,
+                    latitudeDelta: 0.01,
+                    longitudeDelta: 0.01,
+                });
+                return;
+            }
+
+            // Fall back to requesting current location
+            const { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                alert('Permission to access location was denied');
+                return;
+            }
+            
+            const location = await Location.getCurrentPositionAsync({});
+            setRegion({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+            });
+        } catch (error) {
+            console.error('Error fetching location:', error);
+        }
+    };
+
+
 
     // Handler for bell button press
     const handleBellPress = async () => {
